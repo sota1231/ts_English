@@ -1,0 +1,2 @@
+2024年12月7日
+noteアプリにfirebaseの認証機能とcloud firestreを追加（ローカルストレージ撤廃）
