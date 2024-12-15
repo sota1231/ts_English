@@ -1,7 +1,109 @@
 import React from 'react'
 import './Wordlist.css';
 
-const Wordlist = ({ onAddNote, notes, onDeleteNote, activeNote, setActiveNote, userName, handleLogout, onUpdateCheckbox, onUpdateNote }) => {
+const Wordlist = ({
+    onAddNote,
+    notes,
+    onDeleteNote,
+    activeNote,
+    setActiveNote,
+    userName,
+    handleLogout,
+    onUpdateCheckbox,
+    onUpdateNote,
+}) => {
+
+    // CSV出力機能
+    const exportToCSV = () => {
+        // ヘッダー行を追加
+        const csvData = [
+            ['英語', '日本語', '暗記済み', '作成日']
+        ];
+
+        // データ行を追加
+        notes.forEach(note => {
+            csvData.push([
+                note.english || '',
+                note.japanese || '',
+                note.remenber ? true : false,
+                new Date(note.createDate).toLocaleDateString()
+            ]);
+        });
+
+        // CSV形式の文字列に変換
+        const csvString = csvData.map(row => row.join(',')).join('\n');
+
+        // BOMを追加してShift-JISでエンコード
+        const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+        const blob = new Blob([bom, csvString], { type: 'text/csv;charset=utf-8;' });
+
+        // ダウンロードリンクを作成
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `単語帳_${new Date().toLocaleDateString()}.csv`;
+
+        // リンクをクリックしてダウンロード開始
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    // CSV入力処理
+    const importFromCSV = (e) => {
+        const file = e.target.files[0];
+
+        // 確認ダイアログを表示
+        if (!window.confirm('既存のデータがすべて削除され、CSVのデータで上書きされます。よろしいですか？')) {
+            e.target.value = ''; // ファイル選択をリセット
+            return;
+        }
+        
+        const reader = new FileReader();
+
+        reader.onload = async (event) => {
+            try {
+                // BOMを除去してCSVを行に分割
+                const csvText = event.target.result.replace(/^\uFEFF/, '');
+                const rows = csvText.split('\n');
+
+                // 既存のノートをすべて削除
+                notes.forEach(note => {
+                    onDeleteNote(note.id);
+                });
+
+
+
+                // ヘッダー行をスキップしてデータ処理
+                for (let i = 1; i < rows.length; i++) {
+                    if (!rows[i].trim()) continue; // 空行をスキップ
+
+                    const columns = rows[i].split(',');
+                    const englishText = columns[0]?.trim();
+                    const japaneseText = columns[1]?.trim();
+
+                    if (!englishText) continue; // 英語が空の行はスキップ
+
+                    // 新規ノートを作成
+                    const newNote = {
+                        id: Date.now().toString(),
+                        english: englishText,
+                        japanese: japaneseText || '',
+                        createDate: Date.now(),
+                        modDate: Date.now(),
+                        checked: false
+                    };
+
+                    await onAddNote(newNote);
+                }
+                alert('CSVファイルのインポートが完了しました');
+            } catch (error) {
+                console.error('CSVの処理中にエラーが発生しました:', error);
+                alert('CSVファイルの処理中にエラーが発生しました');
+            }
+        };
+
+        reader.readAsText(file);
+    };
 
     const sortedNotes = notes.sort((a, b) => b.createDate - a.createDate)
 
@@ -10,6 +112,17 @@ const Wordlist = ({ onAddNote, notes, onDeleteNote, activeNote, setActiveNote, u
             <div className='app-wordlist-header'>
                 <h1>リスト</h1>
                 <button onClick={onAddNote}>新規作成</button>
+                <button onClick={exportToCSV}>CSV出力</button>
+                <input
+                    type="file"
+                    accept=".csv"
+                    onChange={importFromCSV}
+                    style={{ display: 'none' }}
+                    id="csv-input"
+                />
+                <button onClick={() => document.getElementById('csv-input').click()}>
+                    CSVからインポート
+                </button>
             </div>
             <div className='app-wordlist-notes'>
                 {sortedNotes.map((note) => (

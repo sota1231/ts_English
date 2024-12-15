@@ -55,24 +55,12 @@ function App() {
     return () => unsubscribe();
   }, [user]);
 
-  // 新規ノート作成
-  // const onAddNote = () => {
-  //   console.log("追加");
-  //   const newNote = {
-  //     id: uuid(),
-  //     title: "新しいノート",
-  //     content: "新しいノートの内容",
-  //     modDate: Date.now(),
-  //   };
-  //   setNotes([...notes, newNote]);
-  //   console.log(notes);
-  // };
 
   // 新規ノート作成
-  const onAddNote = async () => {
+  const onAddNote = async (noteData) => {
     const newNote = {
-      english: "",
-      japanese: "",
+      english:  noteData?.english || '',
+      japanese: noteData?.japanese || '',
       modDate: Date.now(),
       createDate:  Date.now(),
       remenber: false,
@@ -94,13 +82,6 @@ function App() {
     });
   };
 
-
-
-  // const onDeleteNote = (id) => {
-  //   // filterは残す関数。idが一致しないものだけを残す
-  //   const filterNotes = notes.filter((note) => note.id !== id);
-  //   setNotes(filterNotes);
-  // }
   // ノート削除
   const onDeleteNote = async (id) => {
     await deleteDoc(doc(db, "English_words", id));
@@ -110,20 +91,6 @@ function App() {
     // findは一致したデータを取得する関数
     return notes.find((note) => note.id === activeNote);
   }
-
-  // 修正された新しいNoteを返すロジック
-  // const onUpdateNote = (updatedNote) => {
-  //   const updateNotesArray = notes.map((note) => {
-  //     if (note.id === updatedNote.id) {
-  //       return updatedNote;
-  //       // return;
-  //     }else {
-  //       return note;
-  //     }
-  //   });
-
-  //   setNotes(updateNotesArray);
-  // }
 
   // ノート更新
   const onUpdateNote = async (updatedNote) => {
@@ -167,7 +134,7 @@ function App() {
               </ErrorBoundary>
               
               <Wordlist
-              onUpdateNote={onUpdateNote}
+                onUpdateNote={onUpdateNote}
                 userName={user.displayName}
                 handleLogout={handleLogout}
                 onAddNote={onAddNote}
