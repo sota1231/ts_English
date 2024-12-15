@@ -6,6 +6,10 @@
   display: flex;
 }
 
+.main{
+  width: 70%;
+}
+
 .login {
   display: flex;
   flex-direction: column;

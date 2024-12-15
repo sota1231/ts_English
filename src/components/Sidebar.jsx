@@ -1,43 +1,37 @@
 import React from 'react'
 import './Sidebar.css';
+import { Link, useLocation } from 'react-router-dom';
 
-const Sidebar = ({onAddNote,notes,onDeleteNote,activeNote,setActiveNote,userName,handleLogout}) => {
-  
-    // TODO:notesのデータを展開する。localストレージからではなく、firebaseから
-    const sortedNotes = notes.sort((a,b) => b.modDate - a.modDate)
+const Sidebar = ({ onAddNote, notes, onDeleteNote, activeNote, setActiveNote, userName, handleLogout }) => {
+
+    const location = useLocation();
+    const sortedNotes = notes.sort((a, b) => b.modDate - a.modDate)
 
     return (
-    <div className='app-sidebar'>
-        <div>
-            <span>ようこそ、{userName}さん！</span>
-            <button className='center' onClick={handleLogout}>ログアウト</button>
-        </div>
-        <div className='app-sidebar-header'>
-            <h1>ノート</h1>
-            <button onClick={onAddNote}>追加</button>
-        </div>
-        <div className='app-sidebar-notes'>
-            {sortedNotes.map((note) => (
-                <div 
-                className={`app-sidebar-note ${note.id === activeNote && "active"}`} 
-                key={note.id}
-                onClick={()=>setActiveNote(note.id)}
-                >
-                <div className='sidebar-note-title'>
-                    <strong>{note.title}</strong>
-                    <button onClick={() => onDeleteNote(note.id) }>削除</button>
-                </div>
-                <p>{note.content}</p>
-                <small>{new Date(note.modDate).toLocaleDateString("ja-JP",{
-                    hour: "2-digit",
-                    minute:"2-digit",
-                }
-                )}</small>
+        <div className='app-sidebar'>
+            <div>
+                <span>ようこそ、{userName}さん！</span>
+                <button className='center' onClick={handleLogout}>ログアウト</button>
             </div>
-            ))}
+            <div className='app-sidebar-header'>
+
+                <div className='app-sidebar-nav'>
+                    <Link
+                        to="/words"
+                        className={location.pathname === '/words' ? 'active' : ''}
+                    >
+                        単語リスト
+                    </Link>
+                    <Link
+                        to="/articles"
+                        className={location.pathname === '/articles' ? 'active' : ''}
+                    >
+                        記事リスト
+                    </Link>
+                </div>
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default Sidebar

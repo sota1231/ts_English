@@ -6,20 +6,19 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAgKqbap65oHTbIqwsAN7NYfZLZS8RS6hE",
-  authDomain: "note-4d4ac.firebaseapp.com",
-  projectId: "note-4d4ac",
-  storageBucket: "note-4d4ac.firebasestorage.app",
-  messagingSenderId: "936536926127",
-  appId: "1:936536926127:web:7a000fbae24b8aeb56715a",
-  measurementId: "G-C3P8NEMF6R"
+  apiKey: "AIzaSyA4uthUCcIlBRFPkvQVWB3fI6EFbRDzebI",
+  authDomain: "studying-with-the-wall.firebaseapp.com",
+  projectId: "studying-with-the-wall",
+  storageBucket: "studying-with-the-wall.firebasestorage.app",
+  messagingSenderId: "698437784543",
+  appId: "1:698437784543:web:5c574d1260fde213aa2a6a",
+  measurementId: "G-DPV1YNQ5T2"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 // 初期化
 const auth = getAuth(app);
-console.log(auth);
 const provider = new GoogleAuthProvider();
 const db = getFirestore(app);
 
