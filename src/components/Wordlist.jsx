@@ -3,7 +3,6 @@ import './Wordlist.css';
 
 const Wordlist = ({ onAddNote, notes, onDeleteNote, activeNote, setActiveNote, userName, handleLogout, onUpdateCheckbox, onUpdateNote }) => {
 
-    // TODO:notesのデータを展開する。localストレージからではなく、firebaseから
     const sortedNotes = notes.sort((a, b) => b.createDate - a.createDate)
 
     return (
@@ -13,7 +12,7 @@ const Wordlist = ({ onAddNote, notes, onDeleteNote, activeNote, setActiveNote, u
                 <button onClick={onAddNote}>新規作成</button>
             </div>
             <div className='app-wordlist-notes'>
-                {notes.map((note) => (
+                {sortedNotes.map((note) => (
                     <div
                         className={`app-wordlist-note ${note.id === activeNote && "active"}`}
                         key={note.id}
