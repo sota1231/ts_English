@@ -1,10 +1,10 @@
 import React from 'react'
 import './Wordlist.css';
 
-const Wordlist = ({ onAddNote, notes, onDeleteNote, activeNote, setActiveNote, userName, handleLogout, onUpdateCheckbox }) => {
+const Wordlist = ({ onAddNote, notes, onDeleteNote, activeNote, setActiveNote, userName, handleLogout, onUpdateCheckbox, onUpdateNote }) => {
 
     // TODO:notesのデータを展開する。localストレージからではなく、firebaseから
-    // const sortedNotes = notes.sort((a, b) => b.modDate - a.modDate)
+    const sortedNotes = notes.sort((a, b) => b.createDate - a.createDate)
 
     return (
         <div className='app-wordlist'>

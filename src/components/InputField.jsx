@@ -1,36 +1,47 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import debounce from 'lodash/debounce';
 import "./InputField.css"
 
 const InputField = ({ activeNote, onUpdateNote }) => {
-  // 日本語入力用のローカルステート
+  // ローカルステート
+  const [localEnglish, setLocalEnglish] = useState(activeNote?.english || "");
   const [localJapanese, setLocalJapanese] = useState(activeNote?.japanese || "");
 
-  // activeNoteが変更されたら、localJapaneseも更新
+  // activeNoteが変更されたら、ローカルステートも更新
   useEffect(() => {
     if (activeNote) {
+      setLocalEnglish(activeNote.english || "");
       setLocalJapanese(activeNote.japanese || "");
     }
   }, [activeNote]);
 
-  // 画面クリック時の処理
-  useEffect(() => {
-    const handleDocumentClick = (e) => {
-      // 日本語のtextarea以外をクリックした時
-      if (e.target.id !== 'japanese-textarea' && 
-          localJapanese !== activeNote?.japanese) {
-        onUpdateNote({
-          ...activeNote,
-          japanese: localJapanese,
-          modDate: Date.now()
-        });
-      }
-    };
+  // Firebaseへの保存を遅延させる
+  const saveToFirebase = useCallback(
+    debounce((updatedNote) => {
+      onUpdateNote(updatedNote);
+    }, 500),
+    [onUpdateNote]
+  );
 
-    document.addEventListener('click', handleDocumentClick);
-    return () => {
-      document.removeEventListener('click', handleDocumentClick);
-    };
-  }, [localJapanese, activeNote, onUpdateNote]);
+  const handleEnglishChange = (e) => {
+    const newValue = e.target.value;
+    setLocalEnglish(newValue);  // ローカルステートは即時更新
+    saveToFirebase({           // Firebaseへの保存は遅延
+      ...activeNote,
+      english: newValue,
+      modDate: Date.now()
+    });
+  };
+
+  const handleJapaneseChange = (e) => {
+    const newValue = e.target.value;
+    setLocalJapanese(newValue);  // ローカルステートは即時更新
+    saveToFirebase({            // Firebaseへの保存は遅延
+      ...activeNote,
+      japanese: newValue,
+      modDate: Date.now()
+    });
+  };
 
   if (!activeNote) {
     return <div className='no-active-note'>ノートが選択されていません</div>;
@@ -45,14 +56,8 @@ const InputField = ({ activeNote, onUpdateNote }) => {
             id='english-textarea'
             type="text"
             placeholder='英語を記入'
-            value={activeNote.english}
-            onChange={(e) => {
-              onUpdateNote({
-                ...activeNote,
-                english: e.target.value,
-                modDate: Date.now()
-              });
-            }}
+            value={localEnglish}
+            onChange={handleEnglishChange}
           />
         </div>
         <div className='japanese_field'>
@@ -61,7 +66,7 @@ const InputField = ({ activeNote, onUpdateNote }) => {
             id='japanese-textarea'
             placeholder='翻訳を記入'
             value={localJapanese}
-            onChange={(e) => setLocalJapanese(e.target.value)}
+            onChange={handleJapaneseChange}
           />
         </div>
       </div>

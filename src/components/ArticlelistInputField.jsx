@@ -1,72 +1,51 @@
+import React, { useEffect, useState, useCallback } from 'react'
+import debounce from 'lodash/debounce';
+import "./InputField.css"
 
-import React, { useEffect, useRef, useState } from 'react'
-import "./ArticlelistInputField.css"
+const InputField = ({ activeNote, onUpdateNote }) => {
+  // ローカルステート
+  const [localEnglish, setLocalEnglish] = useState(activeNote?.english || "");
+  const [localJapanese, setLocalJapanese] = useState(activeNote?.japanese || "");
 
-const ArticlelistInputField = ({ activeNote, onUpdateNote }) => {
-  // localNoteの初期化を遅延させる
-  const [localNote, setLocalNote] = useState(null);
-
-  // activeNoteが有効な値になったときにlocalNoteを初期化
+  // activeNoteが変更されたら、ローカルステートも更新
   useEffect(() => {
     if (activeNote) {
-      setLocalNote({
-        english: activeNote.english || "",
-        japanese: activeNote.japanese || ""
-      });
+      setLocalEnglish(activeNote.english || "");
+      setLocalJapanese(activeNote.japanese || "");
     }
   }, [activeNote]);
 
-  // 日本語入力中はlocalNoteに保存
-  const handleJapaneseInput = (value) => {
-    setLocalNote(prev => ({
-      ...prev,
-      japanese: value
-    }));
-  };
+  // Firebaseへの保存を遅延させる
+  const saveToFirebase = useCallback(
+    debounce((updatedNote) => {
+      onUpdateNote(updatedNote);
+    }, 500),
+    [onUpdateNote]
+  );
 
-  // 英語入力は直接Firebase更新
-  const handleEnglishInput = (value) => {
-    onUpdateNote({
+  const handleEnglishChange = (e) => {
+    const newValue = e.target.value;
+    setLocalEnglish(newValue);  // ローカルステートは即時更新
+    saveToFirebase({           // Firebaseへの保存は遅延
       ...activeNote,
-      english: value,
+      english: newValue,
       modDate: Date.now()
     });
   };
 
-  // localNoteがnullの場合は早期リターン
-  if (!activeNote || !localNote) {
-    return <div className='no-active-note'>ノートが選択されていません</div>
-  }
-
-  // クリックイベントのハンドラー
-  const handleDocumentClick = (e) => {
-    // 日本語のtextarea以外がクリックされ、かつ入力内容に変更があった場合
-    if (e.target.id !== 'japanese-textarea' && localNote.japanese !== activeNote.japanese) {
-      onUpdateNote({
-        ...activeNote,
-        japanese: localNote.japanese,
-        modDate: Date.now()
-      });
-    }
+  const handleJapaneseChange = (e) => {
+    const newValue = e.target.value;
+    setLocalJapanese(newValue);  // ローカルステートは即時更新
+    saveToFirebase({            // Firebaseへの保存は遅延
+      ...activeNote,
+      japanese: newValue,
+      modDate: Date.now()
+    });
   };
 
-  // コンポーネントのマウント時にイベントリスナーを設定
-  useEffect(() => {
-    document.addEventListener('click', handleDocumentClick);
-    return () => {
-      document.removeEventListener('click', handleDocumentClick);
-    };
-  }, [localNote]);
-
-  // const onEditNote = (key, value) => {
-  //   onUpdateNote({
-  //     ...activeNote,
-  //     [key]: value,
-  //     modDate: Date.now()
-  //   })
-  // }
-
-  
+  if (!activeNote) {
+    return <div className='no-active-note'>ノートが選択されていません</div>;
+  }
 
   return (
     <div className='app-main'>
@@ -74,26 +53,25 @@ const ArticlelistInputField = ({ activeNote, onUpdateNote }) => {
         <div className='english_field'>
           <strong>英語：</strong>
           <textarea
-            id='title'
+            id='english-textarea'
             type="text"
             placeholder='英語を記入'
-            value={activeNote.english}
-            onChange={(e) => handleEnglishInput(e.target.value)}
-          ></textarea>
+            value={localEnglish}
+            onChange={handleEnglishChange}
+          />
         </div>
         <div className='japanese_field'>
           <strong>日本語：</strong>
           <textarea
             id='japanese-textarea'
             placeholder='翻訳を記入'
-            // value={localNote.japanese && (
-            //   localNote.japanese)}
-            onChange={(e) => handleJapaneseInput( e.target.value)}
-          ></textarea>
+            value={localJapanese}
+            onChange={handleJapaneseChange}
+          />
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ArticlelistInputField
+export default InputField;

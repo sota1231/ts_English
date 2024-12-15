@@ -74,6 +74,7 @@ function App() {
       english: "",
       japanese: "",
       modDate: Date.now(),
+      createDate:  Date.now(),
       remenber: false,
       userId: user.uid  // ユーザーIDを追加
     };
@@ -166,6 +167,7 @@ function App() {
               </ErrorBoundary>
               
               <Wordlist
+              onUpdateNote={onUpdateNote}
                 userName={user.displayName}
                 handleLogout={handleLogout}
                 onAddNote={onAddNote}
