@@ -17,7 +17,6 @@ function App() {
   const [user, setUser] = useState(null);
   const [wordId, setWordId] = useState(null);
   const [notes, setNotes] = useState([]);
-  const [folders, setFolders] = useState([]);
   const [activeNote, setActiveNote] = useState(false);
 
   // 認証状態の監視
@@ -29,24 +28,6 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  // フォルダ情報の取得
-  useEffect(() => {
-    if (!user) return;
-    const q = query(
-      collection(db, "Folders"),
-      where("userId", "==", user.uid)
-    );
-    const aaa = onSnapshot(q, (querySnapshot) => {
-      const foldersData = [];
-      querySnapshot.forEach((doc) => {
-        foldersData.push({ ...doc.data(), id: doc.id });
-      });
-      setFolders(foldersData);
-    });
-
-    return () => aaa(); //TODO 命名する
-  }, [user]);
-
   // ノートの取得
   useEffect(() => {
     if (!user || !wordId) return;
@@ -55,7 +36,6 @@ function App() {
       where("userId", "==", user.uid),
       where("id", "==", wordId)
     );
-    console.log('aaa' + wordId)
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const notesData = [];
       querySnapshot.forEach((doc) => {
@@ -67,18 +47,6 @@ function App() {
     return () => unsubscribe();
   }, [user, wordId]);
 
-
-  // 新規フォルダ作成
-  const onAddFolder = async (folderData) => {
-    const newFolder = {
-      id: wordId, // TODO 自動採番
-      userId: user.uid,
-      name: '',
-      modDate: Date.now(),
-      createDate: Date.now()
-    };
-    await addDoc(collection(db, "Folders"), newFolder);
-  };
 
   // 新規ノート作成
   const onAddNote = async (noteData) => {
@@ -105,26 +73,6 @@ function App() {
     await updateDoc(noteRef, {
       remenber: isChecked
     });
-  };
-
-  // フォルダ削除
-  const onDeleteFolder = async (id) => {
-    try {
-      await deleteDoc(doc(db, "Folders", id));
-
-      const wordsQuery = query(
-        collection(db, "English_words"),
-        where("folderId", "==", id)
-      );
-
-      const querySnapshot = await getDocs(wordsQuery);
-      const deletePromises = querySnapshot.docs.map(doc => doleteDoc(doc.ref));
-      await Promise.all(deletePromises);
-
-
-    } catch (error) {
-      console.error("フォルダ削除中にエラー：", error);
-    }
   };
 
   // ノート削除
@@ -158,9 +106,6 @@ function App() {
         <Sidebar
           userName={user.displayName}
           handleLogout={handleLogout}
-          onAddFolder={onAddFolder}
-          folders={folders}
-          onDeleteFolder={onDeleteFolder}
           activeNote={activeNote}
           setActiveNote={setActiveNote}
           setWordId={setWordId}
@@ -185,12 +130,12 @@ function App() {
                     userName={user.displayName}
                     handleLogout={handleLogout}
                     onAddNote={onAddNote}
-                    onAddFolder={onAddFolder}
                     notes={notes}
                     onDeleteNote={onDeleteNote}
                     activeNote={activeNote}
                     setActiveNote={setActiveNote}
                     onUpdateCheckbox={onUpdateCheckbox}
+                    wordId={wordId}
                   />
                 </div>
               </>

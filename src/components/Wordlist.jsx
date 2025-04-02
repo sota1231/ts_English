@@ -11,7 +11,10 @@ const Wordlist = ({
     handleLogout,
     onUpdateCheckbox,
     onUpdateNote,
+    wordId,
 }) => {
+    console.log('aaa' + wordId)
+
 
     // 読み上げ機能の追加　ーーーーーーーーーーーーーーーーーーーー
     const speakEnglish = (text) => {
@@ -98,7 +101,8 @@ const Wordlist = ({
 
                     // 新規ノートを作成
                     const newNote = {
-                        id: Date.now().toString(),
+                        id: wordId,
+                        // id: Date.now().toString(),
                         english: englishText,
                         japanese: japaneseText || '',
                         createDate: Date.now(),
