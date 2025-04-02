@@ -143,35 +143,37 @@ const Wordlist = ({
                     CSVからインポート
                 </button>
             </div>
-            <div className='app-wordlist-notes'>
-                {sortedNotes.map((note) => (
-                    <div
-                        className={`app-wordlist-note ${note.id === activeNote && "active"}`}
-                        key={note.id}
-                        onClick={() => setActiveNote(note.id)}
-                    >
-                        <input
-                            type="checkbox"
-                            checked={note.remenber}
-                            onChange={(e) => onUpdateCheckbox(note.id, e.target.checked)}
-                        />
-                        <button
-                            onClick={() => speakEnglish(note.english)}
-                            className="speak-button">
-                            英語を読む
-                        </button>
-                        <div className='title_deleteButton'>
-                            <div className='wordlist-note-title'>
-                                <strong>{(note.english ? note.english : 'クリックしてください')}</strong>
-                                <button onClick={() => onDeleteNote(note.id)}>削除</button>
+            {!sortedNotes || sortedNotes.length == 0 ? (<div className='no-active-note'>新規作成を行ってください</div>):(
+                <div className='app-wordlist-notes'>
+                    {sortedNotes.map((note) => (
+                        <div
+                            className={`app-wordlist-note ${note.id === activeNote && "active"}`}
+                            key={note.id}
+                            onClick={() => setActiveNote(note.id)}
+                        >
+                            <input
+                                type="checkbox"
+                                checked={note.remenber}
+                                onChange={(e) => onUpdateCheckbox(note.id, e.target.checked)}
+                            />
+                            <button
+                                onClick={() => speakEnglish(note.english)}
+                                className="speak-button">
+                                英語を読む
+                            </button>
+                            <div className='title_deleteButton'>
+                                <div className='wordlist-note-title'>
+                                    <strong>{(note.english ? note.english : 'クリックしてください')}</strong>
+                                    <button onClick={() => onDeleteNote(note.id)}>削除</button>
+                                </div>
+                                {note.japanese && (
+                                    <p>{note.japanese}</p>
+                                )}
                             </div>
-                            {note.japanese && (
-                                <p>{note.japanese}</p>
-                            )}
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
