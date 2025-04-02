@@ -31,23 +31,36 @@ const Sidebar = ({
                   to="/words/1"
                   className={wordId === '1' ? 'active' : ''}
                 >
-                  単語リスト1
+                  日常会話　1
                 </Link>
 
                 <Link
                   to="/words/2"
                   className={wordId === '2' ? 'active' : ''}
                 >
-                  単語リスト2
+                  日常会話　2
                 </Link>
 
                 <Link
                   to="/words/3"
                   className={wordId === '3' ? 'active' : ''}
                 >
-                  単語リスト3
+                  旅行先
                 </Link>
 
+                <Link
+                  to="/words/4"
+                  className={wordId === '4' ? 'active' : ''}
+                >
+                  映画
+                </Link>
+
+                <Link
+                  to="/words/5"
+                  className={wordId === '5' ? 'active' : ''}
+                >
+                  その他
+                </Link>
 
           </div>
         </div>
