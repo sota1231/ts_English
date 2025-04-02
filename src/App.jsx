@@ -9,41 +9,53 @@ import { auth, db } from "./firebase";
 import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, query, where } from "firebase/firestore";
 import Articlelist from './components/Articlelist'
 import ArticlelistInputField from './components/ArticlelistInputField'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary'
 
 function App() {
   // const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")) || []);
   const [user, setUser] = useState(null);
+  const [wordId, setWordId] = useState(null);
   const [notes, setNotes] = useState([]);
+  const [folders, setFolders] = useState([]);
   const [activeNote, setActiveNote] = useState(false);
-
 
   // 認証状態の監視
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
     });
+
     return () => unsubscribe();
   }, []);
-  // useEffect(() => {
-  //   localStorage.setItem("notes",JSON.stringify(notes));
-  // },[notes])
 
-  // // 読み込まれたときに発火（１番目のデータを表示）
-  // useEffect(() => {
-  //   if(notes[0]){
-  //     setActiveNote(notes[0].id);
-  //   }
-  // },[])
-
-  // ノートの取得
+  // フォルダ情報の取得
   useEffect(() => {
     if (!user) return;
     const q = query(
-      collection(db, "English_words"),
+      collection(db, "Folders"),
       where("userId", "==", user.uid)
     );
+    const aaa = onSnapshot(q, (querySnapshot) => {
+      const foldersData = [];
+      querySnapshot.forEach((doc) => {
+        foldersData.push({ ...doc.data(), id: doc.id });
+      });
+      setFolders(foldersData);
+    });
+
+    return () => aaa(); //TODO 命名する
+  }, [user]);
+
+  // ノートの取得
+  useEffect(() => {
+    if (!user || !wordId) return;
+    const q = query(
+      collection(db, "English_words"),
+      where("userId", "==", user.uid),
+      where("id", "==", wordId)
+    );
+    console.log('aaa' + wordId)
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const notesData = [];
       querySnapshot.forEach((doc) => {
@@ -53,18 +65,31 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, wordId]);
 
+
+  // 新規フォルダ作成
+  const onAddFolder = async (folderData) => {
+    const newFolder = {
+      id: wordId, // TODO 自動採番
+      userId: user.uid,
+      name: '',
+      modDate: Date.now(),
+      createDate: Date.now()
+    };
+    await addDoc(collection(db, "Folders"), newFolder);
+  };
 
   // 新規ノート作成
   const onAddNote = async (noteData) => {
     const newNote = {
-      english:  noteData?.english || '',
+      english: noteData?.english || '',
       japanese: noteData?.japanese || '',
       modDate: Date.now(),
-      createDate:  Date.now(),
+      createDate: Date.now(),
       remenber: false,
-      userId: user.uid  // ユーザーIDを追加
+      userId: user.uid,  // ユーザーIDを追加
+      id: wordId
     };
     await addDoc(collection(db, "English_words"), newNote);
   };
@@ -80,6 +105,26 @@ function App() {
     await updateDoc(noteRef, {
       remenber: isChecked
     });
+  };
+
+  // フォルダ削除
+  const onDeleteFolder = async (id) => {
+    try {
+      await deleteDoc(doc(db, "Folders", id));
+
+      const wordsQuery = query(
+        collection(db, "English_words"),
+        where("folderId", "==", id)
+      );
+
+      const querySnapshot = await getDocs(wordsQuery);
+      const deletePromises = querySnapshot.docs.map(doc => doleteDoc(doc.ref));
+      await Promise.all(deletePromises);
+
+
+    } catch (error) {
+      console.error("フォルダ削除中にエラー：", error);
+    }
   };
 
   // ノート削除
@@ -110,44 +155,49 @@ function App() {
   return (
     <BrowserRouter>
       <div className='App'>
-        {/* <div className="app-header">
-        <span>ようこそ、{user.displayName}さん！</span>
-        <button onClick={handleLogout}>ログアウト</button>
-      </div> */}
         <Sidebar
           userName={user.displayName}
           handleLogout={handleLogout}
-          onAddNote={onAddNote}
-          notes={notes}
-          onDeleteNote={onDeleteNote}
+          onAddFolder={onAddFolder}
+          folders={folders}
+          onDeleteFolder={onDeleteFolder}
           activeNote={activeNote}
           setActiveNote={setActiveNote}
+          setWordId={setWordId}
         />
         <Routes>
-          <Route path="/words" element={
-            <div className='main'>
-              <ErrorBoundary>
-              <InputField
-                activeNote={getActiveNote()}
-                onUpdateNote={onUpdateNote}
-              />
-              </ErrorBoundary>
-              
-              <Wordlist
-                onUpdateNote={onUpdateNote}
-                userName={user.displayName}
-                handleLogout={handleLogout}
-                onAddNote={onAddNote}
-                notes={notes}
-                onDeleteNote={onDeleteNote}
-                activeNote={activeNote}
-                setActiveNote={setActiveNote}
-                onUpdateCheckbox={onUpdateCheckbox}
-              />
-            </div>
+          <Route path="/words/:wordsId" element={
+            wordId == null ? (
+              <div className='no-active-note'>←フォルダが選択されていません</div>
+            ) : (
+              <>
+                <div className='main'>
+
+                  <ErrorBoundary>
+                    <InputField
+                      activeNote={getActiveNote()}
+                      onUpdateNote={onUpdateNote}
+                    />
+                  </ErrorBoundary>
+
+                  <Wordlist
+                    onUpdateNote={onUpdateNote}
+                    userName={user.displayName}
+                    handleLogout={handleLogout}
+                    onAddNote={onAddNote}
+                    onAddFolder={onAddFolder}
+                    notes={notes}
+                    onDeleteNote={onDeleteNote}
+                    activeNote={activeNote}
+                    setActiveNote={setActiveNote}
+                    onUpdateCheckbox={onUpdateCheckbox}
+                  />
+                </div>
+              </>
+            )
           } />
-          
-          <Route path="/articles" element={
+
+          {/* <Route path="/articles" element={
             <div className='main'>
               <ArticlelistInputField
                 activeNote={getActiveNote()}
@@ -164,7 +214,7 @@ function App() {
                 onUpdateCheckbox={onUpdateCheckbox}
               />
             </div>
-          } />
+          } /> */}
 
         </Routes>
       </div>

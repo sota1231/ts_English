@@ -1,3 +1,7 @@
+.sidebar_start_position{
+    margin: 20px 0 0 20px;
+}
+
 button{
     background: none;
     border: none;
@@ -15,8 +19,8 @@ button{
 }
 
 .app-sidebar-header{
-    display: flex;
-    justify-content: space-between;
+    /* display: flex; */
+    /* justify-content: space-between; */
     padding: 25px;
 }
 
@@ -60,18 +64,29 @@ button{
 .app-sidebar-nav {
     padding: 15px;
     border-bottom: 1px solid #ddd;
-  }
-  
-  .app-sidebar-nav a {
-    display: block;
-    margin-right: 15px;
-    text-decoration: none;
-    color: #333;
-    padding: 5px 10px;
-  }
-  
-  .app-sidebar-nav a.active {
-    background-color: #4a4a4a;
-    color: white;
-    border-radius: 4px;
-  }
+}
+.app-sidebar-nav>button{
+    margin-bottom: 20px;
+    border: 2px solid;
+    padding: 5px 16px;
+    color: rgb(250, 155, 103);
+    border-radius: 6px;
+    font-weight: bold;
+    transition: all 0.3s;
+    background-color: rgba(255, 255, 255, 0.796);
+}
+
+.app-sidebar-nav a {
+display: block;
+margin-right: 15px;
+text-decoration: none;
+color: #333;
+padding: 5px 10px;
+}
+
+.app-sidebar-nav a.active {
+background-color: #4a4a4a;
+color: white;
+border-radius: 4px;
+}
+
