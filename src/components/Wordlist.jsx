@@ -58,7 +58,8 @@ const Wordlist = ({
         // ダウンロードリンクを作成
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `単語帳_${new Date().toLocaleDateString()}.csv`;
+        const csv_title = wordId == '1'? '日常会話１': wordId == '2'? '日常会話２': wordId == '3'? '旅行先': wordId == '4'? '映画': 'その他';
+        link.download = `${csv_title}_${new Date().toLocaleDateString()}.csv`;
 
         // リンクをクリックしてダウンロード開始
         document.body.appendChild(link);
