@@ -1,92 +1,111 @@
-.sidebar_start_position{
-    margin: 20px 0 0 20px;
-}
-
-button{
+button {
     background: none;
     border: none;
-    color: #08E;
+    color: #08e;
     margin: 0;
     padding: 0;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
+  }
+
+.sidebar_start_position {
+  margin: 20px 20px 0 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.app-sidebar{
-    width: 30%;
-    height: 100vh;
-    border-right: 1px solid #ddd;
+.sidebar_start_position span{
+    font-size: 14px;
+    text-decoration:underline;
 }
 
-.app-sidebar-header{
-    /* display: flex; */
-    /* justify-content: space-between; */
-    padding: 25px;
+.app-sidebar {
+  width: 30%;
+  height: 100vh;
+  border-right: 1px solid #ddd;
 }
 
-.app-sidebar-header h1{
-    margin: 0;
+.app-sidebar-header {
+  /* display: flex; */
+  /* justify-content: space-between; */
+  padding: 25px;
 }
 
-.app-sidebar-notes{
-    height: calc(100vh - 78px);
-    overflow-y: scroll;
+.app-sidebar-header h1 {
+  margin: 0;
 }
 
-.app-sidebar-note{
-    cursor: pointer;
-    padding: 25px;
-    transition: all 0.3s;
+.app-sidebar-notes {
+  height: calc(100vh - 78px);
+  overflow-y: scroll;
 }
 
-.sidebar-note-title{
-    display: flex;
-    justify-content: space-between;
+.app-sidebar-note {
+  cursor: pointer;
+  padding: 25px;
+  transition: all 0.3s;
 }
 
-.app-sidebar-note p{
-    margin: 10px 0;
+.sidebar-note-title {
+  display: flex;
+  justify-content: space-between;
 }
 
-.app-sidebar-note small{
-    color: #999;
+.app-sidebar-note p {
+  margin: 10px 0;
 }
 
-.app-sidebar-note:hover{
-    background-color: #b4b1b1;
+.app-sidebar-note small {
+  color: #999;
 }
 
-.app-sidebar-note.active{
-    background-color: #b4b1b1;
+.app-sidebar-note:hover {
+  background-color: #b4b1b1;
+}
+
+.app-sidebar-note.active {
+  background-color: #b4b1b1;
 }
 
 /* Sidebar.css */
 .app-sidebar-nav {
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
 }
-.app-sidebar-nav>button{
-    margin-bottom: 20px;
-    border: 2px solid;
-    padding: 5px 16px;
-    color: rgb(250, 155, 103);
-    border-radius: 6px;
-    font-weight: bold;
-    transition: all 0.3s;
-    background-color: rgba(255, 255, 255, 0.796);
+.app-sidebar-nav > button {
+  margin-bottom: 20px;
+  border: 2px solid;
+  padding: 5px 16px;
+  color: rgb(250, 155, 103);
+  border-radius: 6px;
+  font-weight: bold;
+  transition: all 0.3s;
+  background-color: rgba(255, 255, 255, 0.796);
 }
 
 .app-sidebar-nav a {
-display: block;
-margin-right: 15px;
-text-decoration: none;
-color: #333;
-padding: 8px 10px;
+  display: block;
+  margin-right: 15px;
+  text-decoration: none;
+  color: #333;
+  padding: 8px 10px;
 }
 
 .app-sidebar-nav a.active {
-background-color: #4a4a4a;
-color: white;
-border-radius: 4px;
+  background-color: #4a4a4a;
+  color: white;
+  border-radius: 4px;
 }
 
+.advice {
+  margin-top: 20px;
+  padding: 15px 0 15px 15px;
+  font-size: 12px;
+  background-color: rgb(236, 176, 241, 0.8);
+  border-radius: 30px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.advice span {
+  font-size: 16px;
+}
