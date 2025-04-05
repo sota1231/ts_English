@@ -85,7 +85,7 @@ const Wordlist = ({
                 const csvText = event.target.result.replace(/^\uFEFF/, '');
                 const rows = csvText.split('\n');
 
-                // 既存のノートをすべて削除
+                // 既存の英単語・英文をすべて削除
                 notes.forEach(note => {
                     onDeleteNote(note.id);
                 });
@@ -100,7 +100,7 @@ const Wordlist = ({
 
                     if (!englishText) continue; // 英語が空の行はスキップ
 
-                    // 新規ノートを作成
+                    // 新規英単語・英文を作成
                     const newNote = {
                         id: wordId,
                         // id: Date.now().toString(),

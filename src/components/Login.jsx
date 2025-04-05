@@ -11,7 +11,7 @@ const Login = () => {
 
   return (
     <div className="login">
-      <h2>ノートアプリにログイン</h2>
+      <h2>英単語・英文アプリにログイン</h2>
       <button onClick={signInWithGoogle}>
         Googleでログイン
       </button>

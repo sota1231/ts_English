@@ -28,7 +28,7 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  // ノートの取得
+  // 英単語・英文の取得
   useEffect(() => {
     if (!user || !wordId) return;
     const q = query(
@@ -48,7 +48,7 @@ function App() {
   }, [user, wordId]);
 
 
-  // 新規ノート作成
+  // 新規英単語・英文作成
   const onAddNote = async (noteData) => {
     const newNote = {
       english: noteData?.english || '',
@@ -75,7 +75,7 @@ function App() {
     });
   };
 
-  // ノート削除
+  // 英単語・英文削除
   const onDeleteNote = async (id) => {
     await deleteDoc(doc(db, "English_words", id));
   };
@@ -85,7 +85,7 @@ function App() {
     return notes.find((note) => note.id === activeNote);
   }
 
-  // ノート更新
+  // 英単語・英文更新
   const onUpdateNote = async (updatedNote) => {
     const noteRef = doc(db, "English_words", updatedNote.id);
     await updateDoc(noteRef, {

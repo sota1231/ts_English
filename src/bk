@@ -36,7 +36,7 @@ function App() {
   //   }
   // },[])
 
-  // ノートの取得
+  // 英単語・英文の取得
   useEffect(() => {
     if (!user) return;
     const q = query(
@@ -54,20 +54,20 @@ function App() {
     return () => unsubscribe();
   }, [user]);
 
-  // 新規ノート作成
+  // 新規英単語・英文作成
   // const onAddNote = () => {
   //   console.log("追加");
   //   const newNote = {
   //     id: uuid(),
-  //     title: "新しいノート",
-  //     content: "新しいノートの内容",
+  //     title: "新しい英単語・英文",
+  //     content: "新しい英単語・英文の内容",
   //     modDate: Date.now(),
   //   };
   //   setNotes([...notes, newNote]);
   //   console.log(notes);
   // };
 
-  // 新規ノート作成
+  // 新規英単語・英文作成
   const onAddNote = async () => {
     const newNote = {
       english: "",
@@ -99,7 +99,7 @@ function App() {
   //   const filterNotes = notes.filter((note) => note.id !== id);
   //   setNotes(filterNotes);
   // }
-  // ノート削除
+  // 英単語・英文削除
   const onDeleteNote = async (id) => {
     await deleteDoc(doc(db, "English_words", id));
   };
@@ -123,7 +123,7 @@ function App() {
   //   setNotes(updateNotesArray);
   // }
 
-  // ノート更新
+  // 英単語・英文更新
   const onUpdateNote = async (updatedNote) => {
     const noteRef = doc(db, "English_words", updatedNote.id);
     await updateDoc(noteRef, {

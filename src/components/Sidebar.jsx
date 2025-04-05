@@ -20,7 +20,8 @@ const Sidebar = ({
   return (
     <div className='app-sidebar'>
       <div className='sidebar_start_position'>
-        <span>ログインユーザー：{userName}</span>
+        {/* <span>ログインユーザー：{userName}</span> */}
+        <span></span>
         <button className='center' onClick={handleLogout}>ログアウト</button>
       </div>
       <div className='app-sidebar-header'>
@@ -80,6 +81,14 @@ const Sidebar = ({
           音声知覚（聴こえた音）<br></br>
           意味理解（文を塊で理解,声色,話の流れ）<br></br>
           がある。<br></br>
+        </div>
+
+        <div className='advice english_brain'>
+          <span>スムーズな会話には英語脳が必須</span><br></br>
+          ①日本語から英語を作るステップをする<br></br>
+          ②ある程度できるようになったら①の日本語と英語で紐づけず<br></br>
+          イメージと英語で紐づけをする<br></br>
+          
         </div>
       </div>
     </div>

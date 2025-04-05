@@ -44,7 +44,7 @@ const InputField = ({ activeNote, onUpdateNote }) => {
   };
 
   if (!activeNote) {
-    return <div className='no-active-note'>ノートが選択されていません</div>;
+    return <div className='no-active-note'>英単語・英文が選択されていません</div>;
   }
 
   return (
