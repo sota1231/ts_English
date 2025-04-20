@@ -113,3 +113,29 @@ button {
 .english_brain {
     background-color: rgba(176, 241, 236, 0.8);
 }
+
+@media screen and (max-width:480px) {
+  a{
+    font-size: 9px;
+  }
+  .app-sidebar-header {
+    padding: 0px;
+}
+.app-sidebar-nav a {
+  margin-right: 0px;
+}
+  .advice {
+    display: none;
+  }
+  .sidebar_start_position span{
+    display: none;
+  }
+  .sidebar_start_position button{
+    font-size: 6px;
+    /* margin: 20px 20px 0 20px; */
+    margin: 0 auto;
+    padding: 0;
+    /* display: flex; */
+    justify-content: space-between;
+  }
+}
