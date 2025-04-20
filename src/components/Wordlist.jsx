@@ -18,6 +18,9 @@ const Wordlist = ({
 
     // 読み上げ機能の追加　ーーーーーーーーーーーーーーーーーーーー
     const speakEnglish = (text) => {
+        // 既存の音声を停止（複数の音声が重ならないように）
+        window.speechSynthesis.cancel();
+        console.log('読み上げ' + text)
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'en-US';  // 英語の声に設定
         utterance.rate = 0.9;      // 読み上げ速度
@@ -25,10 +28,12 @@ const Wordlist = ({
         speechSynthesis.speak(utterance);
     };
 
-    // ページが読み込まれたときに音声を取得
+    // ページが読み込まれたときに音声を取得（読み込まれていないのに読み上げボタン押下で読み上げられず固まることがあった。読み上げ関数内にcancelを入れた、様子見
     window.speechSynthesis.onvoiceschanged = () => {
         voices = window.speechSynthesis.getVoices();
-    };
+        console.log('音　' + voices)
+    }
+
 
 
     // CSV出力機能　ーーーーーーーーーーーーーーーーーーーーーーー
@@ -41,7 +46,7 @@ const Wordlist = ({
         // データ行を追加
         notes.forEach(note => {
             csvData.push([
-                `"${(note.english || '').replace(/"/g, '""')}"`, 
+                `"${(note.english || '').replace(/"/g, '""')}"`,
                 `"${(note.japanese || '').replace(/"/g, '""')}"`,
                 note.remenber ? true : false,
                 new Date(note.createDate).toLocaleDateString()
@@ -58,7 +63,7 @@ const Wordlist = ({
         // ダウンロードリンクを作成
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        const csv_title = wordId == '1'? '日常会話１': wordId == '2'? '日常会話２': wordId == '3'? '旅行先': wordId == '4'? '映画': 'その他';
+        const csv_title = wordId == '1' ? '日常会話１' : wordId == '2' ? '日常会話２' : wordId == '3' ? '旅行先' : wordId == '4' ? '映画' : 'その他';
         link.download = `${csv_title}_${new Date().toLocaleDateString()}.csv`;
 
         // リンクをクリックしてダウンロード開始
@@ -144,7 +149,7 @@ const Wordlist = ({
                     CSVからインポート
                 </button>
             </div>
-            {!sortedNotes || sortedNotes.length == 0 ? (<div className='no-active-note'>新規作成を行ってください</div>):(
+            {!sortedNotes || sortedNotes.length == 0 ? (<div className='no-active-note'>新規作成を行ってください</div>) : (
                 <div className='app-wordlist-notes'>
                     {sortedNotes.map((note) => (
                         <div
