@@ -11,6 +11,7 @@ import Articlelist from './components/Articlelist'
 import ArticlelistInputField from './components/ArticlelistInputField'
 import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary'
+import { Listening } from './components/Listening'
 
 function App() {
   // const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")) || []);
@@ -118,7 +119,7 @@ function App() {
           setActiveNote={setActiveNote}
           setWordId={setWordId}
         />
-        <div className='open' onClick={display}>閉<br/>じ<br/>る</div>
+        <div className='open' onClick={display}>閉<br />じ<br />る</div>
         <Routes>
           <Route path="/words/:wordsId" element={
             wordId == null ? (
@@ -150,6 +151,16 @@ function App() {
               </>
             )
           } />
+          <Route path="/listening" element={
+            <>
+              <div className='main'>
+                <Listening
+                  notes={notes}
+                ></Listening>
+              </div>
+            </>}
+          >
+          </Route>
 
           {/* <Route path="/articles" element={
             <div className='main'>

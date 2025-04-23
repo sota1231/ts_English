@@ -1,0 +1,90 @@
+.listening-container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.word-display {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.english-section,
+.japanese-section {
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.english-word {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.japanese-word {
+  font-size: 18px;
+  color: #666;
+}
+
+.hidden-word {
+  font-size: 24px;
+  color: #999;
+  font-weight: bold;
+}
+
+.control-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.control-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.play-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.show-english {
+  background-color: #2196F3;
+  color: white;
+}
+
+.show-japanese {
+  background-color: #03A9F4;
+  color: white;
+}
+
+.next-word {
+  background-color: #FF9800;
+  color: white;
+}
+
+.mark-remembered {
+  background-color: #9C27B0;
+  color: white;
+}
+
+.control-buttons button:hover {
+  opacity: 0.9;
+}
+
+.no-words {
+  text-align: center;
+  color: #666;
+  font-size: 18px;
+  padding: 20px;
+}

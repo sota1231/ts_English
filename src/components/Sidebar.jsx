@@ -73,6 +73,11 @@ const Sidebar = ({
 
           </div>
         </div>
+        <Link
+              to="/listening"
+            >
+              リスニング問題
+            </Link>
         <div className='advice'>
           <span>聞き取れない原因は２つ</span><br></br>
           ①知らない単語・短文　→　短文を覚える<br></br>
