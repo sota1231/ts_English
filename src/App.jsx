@@ -95,6 +95,13 @@ function App() {
     });
   };
 
+  // 「＜」押下でレイアウトを動かす
+  const display = () => {
+    console.log('aaa')
+    const app = document.querySelector('.App');
+    app.classList.toggle('hidden');
+  }
+
   // ログインしていない場合はログインコンポーネントを表示
   if (!user) {
     return <Login />;
@@ -106,10 +113,12 @@ function App() {
         <Sidebar
           userName={user.displayName}
           handleLogout={handleLogout}
+          display={display}
           activeNote={activeNote}
           setActiveNote={setActiveNote}
           setWordId={setWordId}
         />
+        <div className='open' onClick={display}>閉<br/>じ<br/>る</div>
         <Routes>
           <Route path="/words/:wordsId" element={
             wordId == null ? (

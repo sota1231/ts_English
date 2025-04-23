@@ -13,6 +13,7 @@
 
 .main{
   width: 70%;
+  transition: width 0.3s;
 }
 
 .login {
@@ -44,4 +45,25 @@
 
 .login button:hover {
   background-color: #357abd;
+}
+.open{
+  display: none;
+}
+
+@media screen and (max-width:480px) {
+
+  /* 「＜」ボタン押下時のメインの幅 */
+  .hidden .main{
+      width: 100%;
+  }
+
+  .open {
+    display: block;
+    margin: auto 0;
+    border: rgb(102, 102, 102) 1px solid;
+    font-size: 6px;
+    padding: 10px 1px;
+    border-radius: 2px;
+    background-color: #c4c1c1;
+  }
 }

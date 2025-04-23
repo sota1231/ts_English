@@ -1,12 +1,12 @@
 button {
-    background: none;
-    border: none;
-    color: #08e;
-    margin: 0;
-    padding: 0;
-    font-size: 14px;
-    cursor: pointer;
-  }
+  background: none;
+  border: none;
+  color: #08e;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  cursor: pointer;
+}
 
 .sidebar_start_position {
   margin: 20px 20px 0 20px;
@@ -14,15 +14,17 @@ button {
   justify-content: space-between;
 }
 
-.sidebar_start_position span{
-    font-size: 14px;
-    text-decoration:underline;
+.sidebar_start_position span {
+  font-size: 14px;
+  text-decoration: underline;
 }
 
 .app-sidebar {
   width: 30%;
   height: 100vh;
   border-right: 1px solid #ddd;
+  transition: width 0.3s;
+  overflow: hidden;
 }
 
 .app-sidebar-header {
@@ -103,7 +105,7 @@ button {
   font-size: 12px;
   background-color: rgb(236, 176, 241, 0.8);
   border-radius: 30px;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .advice span {
@@ -111,31 +113,35 @@ button {
 }
 
 .english_brain {
-    background-color: rgba(176, 241, 236, 0.8);
+  background-color: rgba(176, 241, 236, 0.8);
 }
 
-@media screen and (max-width:480px) {
-  a{
+@media screen and (max-width: 480px) {
+  a {
     font-size: 9px;
   }
   .app-sidebar-header {
     padding: 0px;
-}
-.app-sidebar-nav a {
-  margin-right: 0px;
-}
+  }
+  .app-sidebar-nav a {
+    margin-right: 0px;
+    padding: 5px 5px;
+  }
   .advice {
     display: none;
   }
-  .sidebar_start_position span{
+  .sidebar_start_position span {
     display: none;
   }
-  .sidebar_start_position button{
+  .sidebar_start_position button {
     font-size: 6px;
-    /* margin: 20px 20px 0 20px; */
     margin: 0 auto;
     padding: 0;
-    /* display: flex; */
     justify-content: space-between;
   }
+
+  .hidden>.app-sidebar{
+    width: 0%;
+  }
+
 }

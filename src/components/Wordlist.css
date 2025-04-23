@@ -128,24 +128,6 @@
 }
 
 @media screen and (max-width:480px) {
-    /*
-        入力欄 
-     */
-    .app-main-note-edit {
-        padding: 5px 5px 5px;
-        display: block;
-        font-size: 8px;
-    }
-    .app-main-note-edit textarea{
-        font-size: 10px;
-    }
-    .english_field{
-        margin-top: 10px;
-    }
-    .english_field, .japanese_field {
-        width: 100%;
-        margin-top: 10px;
-    }
     
     /*
         リスト文言、各ボタン 
@@ -172,7 +154,7 @@
     /* チェックボックス */
     .app-wordlist-note input {
         width: 5%;
-        margin: 0 2px 0 2px;
+        margin: 0 0px 0 2px;
     }
     /* 英語を読むボタン */
     .app-wordlist-note>button {
@@ -180,6 +162,7 @@
         padding: 2px;
         margin-right: 0px;
         border: 0.5px solid;
+        margin:0 4px;
     }
 
     .title_deleteButton{

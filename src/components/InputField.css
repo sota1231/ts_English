@@ -35,3 +35,25 @@
     font-size: 2rem;
     color: #999; 
 }
+
+@media screen and (max-width:480px) {
+
+    .app-main-note-edit {
+        padding: 0px 0px 0px;
+        display: block;
+        font-size: 8px;
+    }
+    .app-main-note-edit textarea{
+        font-size: 10px;
+        margin: 0;
+    }
+    
+    .english_field, .japanese_field {
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 10px;
+    }
+    .english_field{
+        margin-top: 25px;
+    }
+}
