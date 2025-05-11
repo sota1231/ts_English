@@ -27,14 +27,39 @@ export const Listening = ({ notes, onUpdateCheckbox }) => {
   }, [getRandomUnrememberedWord]);
 
   const speakEnglish = (text) => {
-    window.speechSynthesis.cancel();
+    // 既存の音声を停止
+    if (window.responsiveVoice) {
+      window.responsiveVoice.cancel();
+    }
     console.log('読み上げ: ' + text);
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-    speechSynthesis.speak(utterance);
+    
+    // ResponsiveVoiceを使用して音声読み上げ
+    if (window.responsiveVoice) {
+      window.responsiveVoice.speak(text, "US English Female", {
+        rate: 0.9,
+        pitch: 1,
+        volume: 1,
+        onend: () => {
+          console.log('読み上げ完了');
+        },
+        onerror: (error) => {
+          console.error('読み上げエラー:', error);
+        }
+      });
+    } else {
+      console.error('ResponsiveVoiceが利用できません');
+    }
   };
+
+  // ページが読み込まれたときに音声を初期化
+  useEffect(() => {
+    // ResponsiveVoiceの初期化確認
+    if (window.responsiveVoice) {
+      console.log('ResponsiveVoiceが利用可能です');
+    } else {
+      console.error('ResponsiveVoiceが利用できません');
+    }
+  }, []);
 
   const markAsRemembered = () => {
     if (randomWord) {

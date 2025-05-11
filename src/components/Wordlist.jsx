@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './Wordlist.css';
 
 const Wordlist = ({
@@ -18,21 +18,39 @@ const Wordlist = ({
 
     // 読み上げ機能の追加　ーーーーーーーーーーーーーーーーーーーー
     const speakEnglish = (text) => {
-        // 既存の音声を停止（複数の音声が重ならないように）
-        window.speechSynthesis.cancel();
-        console.log('読み上げ' + text)
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';  // 英語の声に設定
-        utterance.rate = 0.9;      // 読み上げ速度
-        utterance.pitch = 1;       // 音の高さ
-        speechSynthesis.speak(utterance);
+        // 既存の音声を停止
+        if (window.responsiveVoice) {
+            window.responsiveVoice.cancel();
+        }
+        console.log('読み上げ' + text);
+        
+        // ResponsiveVoiceを使用して音声読み上げ
+        if (window.responsiveVoice) {
+            window.responsiveVoice.speak(text, "US English Female", {
+                rate: 0.9,
+                pitch: 1,
+                volume: 1,
+                onend: () => {
+                    console.log('読み上げ完了');
+                },
+                onerror: (error) => {
+                    console.error('読み上げエラー:', error);
+                }
+            });
+        } else {
+            console.error('ResponsiveVoiceが利用できません');
+        }
     };
 
-    // ページが読み込まれたときに音声を取得（読み込まれていないのに読み上げボタン押下で読み上げられず固まることがあった。読み上げ関数内にcancelを入れた、様子見
-    window.speechSynthesis.onvoiceschanged = () => {
-        voices = window.speechSynthesis.getVoices();
-        console.log('音　' + voices)
-    }
+    // ページが読み込まれたときに音声を初期化
+    useEffect(() => {
+        // ResponsiveVoiceの初期化確認
+        if (window.responsiveVoice) {
+            console.log('ResponsiveVoiceが利用可能です');
+        } else {
+            console.error('ResponsiveVoiceが利用できません');
+        }
+    }, []);
 
 
 
