@@ -1,177 +1,144 @@
-.app-wordlist button {
-    background: none;
-    border: none;
-    color: #08E;
-    margin: 0;
-    padding: 0;
-    font-size: 14px;
-    cursor: pointer;
-}
-
 .app-wordlist {
-    width: 100%;
-    height: 100vh;
-    border-right: 1px solid #ddd;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .app-wordlist-header {
     display: flex;
-    /* padding: 25px; */
     align-items: center;
-    /* justify-content: space-between; */
-    /* padding: 25px; */
-    padding-bottom: 15px;
+    gap: 15px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
 }
-
-/* 新規作成ボタン */
-.app-wordlist-header button {
-    margin-left: 20px;
-    border: 2px solid;
-    padding: 5px 16px;
-    color: rgb(250, 155, 103);
-    border-radius: 6px;
-    font-weight: bold;
-    transition: all 0.3s;
-    background-color: rgba(255, 255, 255, 0.796);
-}
-.app-wordlist-header button:hover{
-    color: rgb(248, 247, 246);
-    background-color: rgb(250, 155, 103);
-}
-
-/* CSV出力ボタン */
-.app-wordlist-header .csv_output{
-    color: rgb(50, 239, 144);
-}
-.app-wordlist-header .csv_output:hover{
-    color: rgb(248, 247, 246);
-    background-color: rgb(50, 239, 144);
-}
-
-/* CSV入力ボタン */
-.app-wordlist-header .csv_input{
-    color: rgb(250, 103, 172);
-}
-.app-wordlist-header .csv_input:hover{
-    color: rgb(248, 247, 246);
-    background-color: rgb(250, 103, 172);
-}
-
-/* 英語を読むボタン */
-.app-wordlist-note>button{
-    margin-right: 20px;
-    border: 2px solid;
-    padding: 5px;
-    color: rgb(45, 45, 45);
-    border-radius: 6px;
-    font-weight: bold;
-    transition: all 0.3s;
-    background-color: rgba(235, 216, 216, 0.566);
-}
-.app-wordlist-note>button:hover{
-    color: rgb(248, 247, 246);
-    background-color: rgb(45, 45, 45);
-}
-
 
 .app-wordlist-header h1 {
-    margin: 0 0 0 10px;
-    padding: 0;
+    font-size: 24px;
+    color: #333;
+    margin-right: auto;
+}
+
+.app-wordlist-header button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.app-wordlist-header button.new_post {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.app-wordlist-header button.csv_output,
+.app-wordlist-header button.csv_input {
+    background-color: #2196F3;
+    color: white;
 }
 
 .app-wordlist-notes {
-    height: calc(100vh - 78px);
-    overflow-y: scroll;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
 }
 
 .app-wordlist-note {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
     cursor: pointer;
-    padding: 10px;
-    transition: all 0.3s;
+    position: relative;
     display: flex;
-    width: 100%;
-}
-
-
-
-/* チェックボックス */
-.app-wordlist-note input{
-    width: 3%;
-    max-width: 20px;
-    margin-right: 15px;
-}
-
-/* 英語と削除ボタンの枠 */
-.title_deleteButton{
-    width: 75%;
-}
-/* 英語のテキスト */
-.wordlist-note-title {
-    display: flex;
-    justify-content: space-between;
-}
-
-.app-wordlist-note p {
-    margin: 0;
-}
-
-.app-wordlist-note small {
-    color: #999;
+    flex-direction: column;
+    gap: 15px;
 }
 
 .app-wordlist-note:hover {
-    background-color: #b4b1b1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .app-wordlist-note.active {
-    background-color: #b4b1b1;
+    border: 2px solid #4CAF50;
 }
 
-@media screen and (max-width:480px) {
-    
-    /*
-        リスト文言、各ボタン 
-     */
-    .no-active-note{
-        font-size: 12px;
+.app-wordlist-note input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #4CAF50;
+}
+
+.app-wordlist-note .speak-button {
+    background-color: #FF9800;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    width: fit-content;
+}
+
+.app-wordlist-note .title_deleteButton {
+    flex: 1;
+}
+
+.app-wordlist-note .wordlist-note-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.app-wordlist-note .wordlist-note-title strong {
+    font-size: 16px;
+    color: #333;
+    flex: 1;
+}
+
+.app-wordlist-note .wordlist-note-title button {
+    background-color: #f44336;
+    color: white;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.app-wordlist-note p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.no-active-note {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+    padding: 40px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 768px) {
+    .app-wordlist {
+        padding: 10px;
     }
 
-    h1{
-        font-size: 10px;
+    .app-wordlist-header {
+        flex-direction: column;
+        align-items: stretch;
     }
 
-    /* 
-        英文、英単語 
-    */
-    .app-wordlist-header button{
-        font-size: 10px;
-        padding: 2px;
-        margin-left: 6px;
-    }
-    .app-wordlist-note{
-        padding: 0 0 5px 0;
-    }
-    /* チェックボックス */
-    .app-wordlist-note input {
-        width: 5%;
-        margin: 0 0px 0 2px;
-    }
-    /* 英語を読むボタン */
-    .app-wordlist-note>button {
-        font-size: 7px;
-        padding: 2px;
-        margin-right: 0px;
-        border: 0.5px solid;
-        margin:0 4px;
+    .app-wordlist-header h1 {
+        margin-bottom: 10px;
     }
 
-    .title_deleteButton{
-        font-size: 8px;
+    .app-wordlist-notes {
+        grid-template-columns: 1fr;
     }
-
-    .title_deleteButton button{
-        font-size: 8px;
-    }
-
-    
 }

@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Wordlist.css';
+import { useVoiceSettings } from '../contexts/VoiceSettingsContext';
 
 const Wordlist = ({
     onAddNote,
@@ -13,6 +14,10 @@ const Wordlist = ({
     onUpdateNote,
     wordId,
 }) => {
+    const { voiceSettings } = useVoiceSettings();
+    const [showVoiceSettings, setShowVoiceSettings] = useState(false);
+    const [csvInputKey, setCsvInputKey] = useState(Date.now());
+
     console.log('aaa' + wordId)
 
 
@@ -27,9 +32,9 @@ const Wordlist = ({
         // ResponsiveVoiceを使用して音声読み上げ
         if (window.responsiveVoice) {
             window.responsiveVoice.speak(text, "US English Female", {
-                rate: 0.9,
-                pitch: 1,
-                volume: 1,
+                rate: voiceSettings.rate,
+                pitch: voiceSettings.pitch,
+                volume: voiceSettings.volume,
                 onend: () => {
                     console.log('読み上げ完了');
                 },
@@ -40,6 +45,14 @@ const Wordlist = ({
         } else {
             console.error('ResponsiveVoiceが利用できません');
         }
+    };
+
+    // 音声設定の変更ハンドラー
+    const handleVoiceSettingChange = (setting, value) => {
+        setVoiceSettings(prev => ({
+            ...prev,
+            [setting]: value
+        }));
     };
 
     // ページが読み込まれたときに音声を初期化
@@ -137,6 +150,7 @@ const Wordlist = ({
                     await onAddNote(newNote);
                 }
                 alert('CSVファイルのインポートが完了しました');
+                setCsvInputKey(Date.now());
             } catch (error) {
                 console.error('CSVの処理中にエラーが発生しました:', error);
                 alert('CSVファイルの処理中にエラーが発生しました');
@@ -156,6 +170,7 @@ const Wordlist = ({
                 <button className='new_post' onClick={onAddNote}>新規作成</button>
                 <button className='csv_output' onClick={exportToCSV}>CSV出力</button>
                 <input
+                    key={csvInputKey}
                     type="file"
                     accept=".csv"
                     onChange={importFromCSV}
@@ -167,11 +182,13 @@ const Wordlist = ({
                     CSVからインポート
                 </button>
             </div>
-            {!sortedNotes || sortedNotes.length == 0 ? (<div className='no-active-note'>新規作成を行ってください</div>) : (
+            {!sortedNotes || sortedNotes.length === 0 ? (
+                <div className='no-active-note'>新規作成を行ってください</div>
+            ) : (
                 <div className='app-wordlist-notes'>
                     {sortedNotes.map((note) => (
                         <div
-                            className={`app-wordlist-note ${note.id === activeNote && "active"}`}
+                            className={`app-wordlist-note ${note.id === activeNote ? "active" : ""}`}
                             key={note.id}
                             onClick={() => setActiveNote(note.id)}
                         >
@@ -187,7 +204,7 @@ const Wordlist = ({
                             </button>
                             <div className='title_deleteButton'>
                                 <div className='wordlist-note-title'>
-                                    <strong>{(note.english ? note.english : 'クリックしてください')}</strong>
+                                    <strong>{note.english ? note.english : 'クリックしてください'}</strong>
                                     <button onClick={() => onDeleteNote(note.id)}>削除</button>
                                 </div>
                                 {note.japanese && (

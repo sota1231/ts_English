@@ -1,6 +1,6 @@
 import { useEffect, React } from 'react'
 import './Sidebar.css';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = ({
   activeNote, setActiveNote,
@@ -8,12 +8,10 @@ const Sidebar = ({
   display,
   setWordId
 }) => {
-
-  const location = useLocation(); // パスを取得
+  const location = useLocation();
   const pathParts = location.pathname.split('/');
-  const wordId = pathParts[2]; // インデックスNo2の値を取得
+  const wordId = pathParts[2];
 
-  // 親で設定したuseStateを使ってセット＝親のuseStateが発火して親でも使用が可能になる
   useEffect(() => {
     setWordId(wordId);
   }, [wordId, setWordId]);
@@ -26,7 +24,6 @@ const Sidebar = ({
         <button className='center' onClick={handleLogout}>ログアウト</button>
       </div>
       <div className='app-sidebar-header'>
-
         <div className='app-sidebar-nav'>
           <div className='app-wordlist-not'>
             <Link
@@ -70,14 +67,20 @@ const Sidebar = ({
             >
               その他
             </Link>
-
           </div>
         </div>
         <Link
-              to="/listening"
-            >
-              リスニング問題
-            </Link>
+          to="/listening"
+          className={location.pathname === '/listening' ? 'active' : ''}
+        >
+          リスニング問題
+        </Link>
+        <Link
+          to="/voice-settings"
+          className={location.pathname === '/voice-settings' ? 'active' : ''}
+        >
+          音声設定
+        </Link>
         <div className='advice'>
           <span>聞き取れない原因は２つ</span><br></br>
           ①知らない単語・短文　→　短文を覚える<br></br>
@@ -94,7 +97,6 @@ const Sidebar = ({
           ①日本語から英語を作るステップをする<br></br>
           ②ある程度できるようになったら①の日本語と英語で紐づけず<br></br>
           イメージと英語で紐づけをする<br></br>
-          
         </div>
       </div>
     </div>

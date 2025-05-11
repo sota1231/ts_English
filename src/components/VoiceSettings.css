@@ -1,0 +1,137 @@
+.voice-settings-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.voice-settings-container h2 {
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.voice-settings-content {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.voice-settings-content h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.voice-setting-item {
+    margin-bottom: 25px;
+}
+
+.voice-setting-item label {
+    display: block;
+    margin-bottom: 10px;
+    color: #666;
+    font-size: 16px;
+}
+
+.voice-setting-item input[type="range"] {
+    width: 100%;
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.voice-setting-item input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #4CAF50;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.voice-setting-item input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+}
+
+.voice-setting-item .value-display {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    color: #666;
+    font-size: 14px;
+}
+
+.test-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.test-section h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.test-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.test-buttons button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.test-buttons button:first-child {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.test-buttons button:last-child {
+    background-color: #2196F3;
+    color: white;
+}
+
+.test-buttons button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.test-buttons button:active {
+    transform: translateY(0);
+}
+
+@media screen and (max-width: 768px) {
+    .voice-settings-container {
+        padding: 10px;
+    }
+
+    .voice-settings-content {
+        padding: 20px;
+    }
+
+    .voice-settings-content h1 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .test-buttons {
+        flex-direction: column;
+    }
+
+    .test-buttons button {
+        width: 100%;
+    }
+} 

@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import "./Listening.css"
+import { useVoiceSettings } from '../contexts/VoiceSettingsContext';
 
 export const Listening = ({ notes, onUpdateCheckbox }) => {
   const [randomWord, setRandomWord] = useState(null);
   const [showJapanese, setShowJapanese] = useState(false);
-  const [showEnglish, setShowEnglish] = useState(false); // 英語表示制御用を追加
+  const [showEnglish, setShowEnglish] = useState(false);
+  const { voiceSettings } = useVoiceSettings();
 
   const getRandomUnrememberedWord = useCallback(() => {
     const unrememberedWords = notes.filter(note => !note.remenber);
@@ -36,9 +38,9 @@ export const Listening = ({ notes, onUpdateCheckbox }) => {
     // ResponsiveVoiceを使用して音声読み上げ
     if (window.responsiveVoice) {
       window.responsiveVoice.speak(text, "US English Female", {
-        rate: 0.9,
-        pitch: 1,
-        volume: 1,
+        rate: voiceSettings.rate,
+        pitch: voiceSettings.pitch,
+        volume: voiceSettings.volume,
         onend: () => {
           console.log('読み上げ完了');
         },
@@ -74,7 +76,23 @@ export const Listening = ({ notes, onUpdateCheckbox }) => {
         <>
           <div className="word-display">
             <h2>リスニング練習</h2>
-            {/* 英語の表示制御 */}
+            <div className="control-buttons">
+              <button className="play-button" onClick={() => speakEnglish(randomWord.english)}>
+                再生する▶
+              </button>
+              <button className="show-english" onClick={() => setShowEnglish(!showEnglish)}>
+                {showEnglish ? '英語を隠す' : '英語を表示'}
+              </button>
+              <button className="show-japanese" onClick={() => setShowJapanese(!showJapanese)}>
+                {showJapanese ? '日本語を隠す' : '日本語を表示'}
+              </button>
+              <button className="next-word" onClick={getRandomUnrememberedWord}>
+                次の単語
+              </button>
+              <button className="mark-remembered" onClick={markAsRemembered}>
+                暗記済みにする
+              </button>
+            </div>
             <div className="english-section">
               {showEnglish ? (
                 <div className="english-word">{randomWord.english}</div>
@@ -82,7 +100,6 @@ export const Listening = ({ notes, onUpdateCheckbox }) => {
                 <div className="hidden-word">???</div>
               )}
             </div>
-            {/* 日本語の表示制御 */}
             <div className="japanese-section">
               {showJapanese ? (
                 <div className="japanese-word">{randomWord.japanese}</div>
@@ -90,39 +107,6 @@ export const Listening = ({ notes, onUpdateCheckbox }) => {
                 <div className="hidden-word">???</div>
               )}
             </div>
-          </div>
-
-          <div className="control-buttons">
-            <button
-              className="play-button"
-              onClick={() => speakEnglish(randomWord.english)}
-            >
-              再生する▶
-            </button>
-            <button
-              className="show-english"
-              onClick={() => setShowEnglish(!showEnglish)}
-            >
-              {showEnglish ? '英語を隠す' : '英語を表示'}
-            </button>
-            <button
-              className="show-japanese"
-              onClick={() => setShowJapanese(!showJapanese)}
-            >
-              {showJapanese ? '日本語を隠す' : '日本語を表示'}
-            </button>
-            <button
-              className="next-word"
-              onClick={getRandomUnrememberedWord}
-            >
-              次の単語
-            </button>
-            <button
-              className="mark-remembered"
-              onClick={markAsRemembered}
-            >
-              暗記済みにする
-            </button>
           </div>
         </>
       ) : (

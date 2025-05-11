@@ -1,59 +1,218 @@
-.app-main{
-    width: 100%;
-    height: 20vh;
+.app-main {
+  width: 100%;
+  height: 20vh;
+  background: #f8f9fa;
 }
 
-.app-main-note-edit{
-    padding: 50px 25px 25px;
-    display: flex;
+.app-main-note-edit {
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
 }
 
-.app-main-note-edit span{
-    width: 100%;
+.app-main-note-edit span {
+  width: 100%;
 }
 
 .app-main-note-edit textarea {
-    border: 1px solid #ddd;
-    margin-right: 20px;
-    width: 88%;
-    /* height: calc(50vh - 130px); */
-    padding: 5px;
-    resize: none;
-    font-size: 16px;
+  border: 1px solid #e0e0e0;
+  margin-right: 20px;
+  width: 88%;
+  padding: 12px;
+  resize: none;
+  font-size: 15px;
+  border-radius: 8px;
+  background: white;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.english_field ,
+.app-main-note-edit textarea:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.english_field,
 .japanese_field {
-    width: 50%;
+  width: 50%;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 /* 英単語・英文未選択 */
-.no-active-note{
-    height: 20vh;
-    line-height: 20vh;
-    text-align: center;
-    font-size: 2rem;
-    color: #999; 
+.no-active-note {
+  height: 20vh;
+  line-height: 20vh;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #999;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-@media screen and (max-width:480px) {
+@media screen and (max-width: 480px) {
+  .app-main-note-edit {
+    padding: 15px;
+    display: block;
+    font-size: 14px;
+  }
 
-    .app-main-note-edit {
-        padding: 0px 0px 0px;
-        display: block;
-        font-size: 8px;
-    }
-    .app-main-note-edit textarea{
-        font-size: 10px;
-        margin: 0;
-    }
-    
-    .english_field, .japanese_field {
-        width: 80%;
-        margin: 0 auto;
-        margin-top: 10px;
-    }
-    .english_field{
-        margin-top: 25px;
-    }
+  .app-main-note-edit textarea {
+    font-size: 14px;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .english_field,
+  .japanese_field {
+    width: 100%;
+    margin: 10px 0;
+    padding: 15px;
+  }
+
+  .english_field {
+    margin-top: 15px;
+  }
+}
+
+.input-field {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field-header {
+  margin-bottom: 15px;
+}
+
+.input-field-header h2 {
+  font-size: 18px;
+  color: #333;
+  font-weight: 500;
+}
+
+.input-field-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.input-group input,
+.input-group textarea {
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  background: #f8f9fa;
+  width: 100%;
+}
+
+.input-group input:hover,
+.input-group textarea:hover {
+  border-color: #ced4da;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  border-color: #4CAF50;
+  outline: none;
+  background: white;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+}
+
+.input-group textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.input-field-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.input-field-buttons button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.save-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+}
+
+.cancel-button {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.cancel-button:hover {
+  background-color: #e0e0e0;
+}
+
+@media screen and (max-width: 768px) {
+  .app-main {
+    padding: 15px;
+  }
+
+  .app-main-note-edit {
+    padding: 0;
+  }
+
+  .input-field {
+    padding: 15px;
+  }
+
+  .input-field-header h2 {
+    font-size: 16px;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .input-field-buttons {
+    flex-direction: column;
+  }
+
+  .input-field-buttons button {
+    width: 100%;
+  }
 }

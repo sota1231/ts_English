@@ -12,6 +12,8 @@ import ArticlelistInputField from './components/ArticlelistInputField'
 import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary'
 import { Listening } from './components/Listening'
+import { VoiceSettingsProvider } from './contexts/VoiceSettingsContext'
+import VoiceSettings from './components/VoiceSettings'
 
 function App() {
   // const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")) || []);
@@ -110,79 +112,67 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className='App'>
-        <Sidebar
-          userName={user.displayName}
-          handleLogout={handleLogout}
-          display={display}
-          activeNote={activeNote}
-          setActiveNote={setActiveNote}
-          setWordId={setWordId}
-        />
-        <div className='open' onClick={display}>閉<br />じ<br />る</div>
-        <Routes>
-          <Route path="/words/:wordsId" element={
-            wordId == null ? (
-              <div className='no-active-note'>←フォルダが選択されていません</div>
-            ) : (
+      <VoiceSettingsProvider>
+        <div className='App'>
+          <Sidebar
+            userName={user.displayName}
+            handleLogout={handleLogout}
+            display={display}
+            activeNote={activeNote}
+            setActiveNote={setActiveNote}
+            setWordId={setWordId}
+          />
+          <div className='open' onClick={display}>閉<br />じ<br />る</div>
+          <Routes>
+            <Route path="/words/:wordsId" element={
+              wordId == null ? (
+                <div className='no-active-note'>←フォルダが選択されていません</div>
+              ) : (
+                <>
+                  <div className='main'>
+                    <ErrorBoundary>
+                      <InputField
+                        activeNote={getActiveNote()}
+                        onUpdateNote={onUpdateNote}
+                      />
+                    </ErrorBoundary>
+
+                    <Wordlist
+                      onUpdateNote={onUpdateNote}
+                      userName={user.displayName}
+                      handleLogout={handleLogout}
+                      onAddNote={onAddNote}
+                      notes={notes}
+                      onDeleteNote={onDeleteNote}
+                      activeNote={activeNote}
+                      setActiveNote={setActiveNote}
+                      onUpdateCheckbox={onUpdateCheckbox}
+                      wordId={wordId}
+                    />
+                  </div>
+                </>
+              )
+            } />
+            <Route path="/listening" element={
               <>
                 <div className='main'>
-
-                  <ErrorBoundary>
-                    <InputField
-                      activeNote={getActiveNote()}
-                      onUpdateNote={onUpdateNote}
-                    />
-                  </ErrorBoundary>
-
-                  <Wordlist
-                    onUpdateNote={onUpdateNote}
-                    userName={user.displayName}
-                    handleLogout={handleLogout}
-                    onAddNote={onAddNote}
+                  <Listening
                     notes={notes}
-                    onDeleteNote={onDeleteNote}
-                    activeNote={activeNote}
-                    setActiveNote={setActiveNote}
                     onUpdateCheckbox={onUpdateCheckbox}
-                    wordId={wordId}
                   />
                 </div>
-              </>
-            )
-          } />
-          <Route path="/listening" element={
-            <>
-              <div className='main'>
-                <Listening
-                  notes={notes}
-                ></Listening>
-              </div>
-            </>}
-          >
-          </Route>
-
-          {/* <Route path="/articles" element={
-            <div className='main'>
-              <ArticlelistInputField
-                activeNote={getActiveNote()}
-                onUpdateNote={onUpdateNote}
-              />
-              <Articlelist
-                userName={user.displayName}
-                handleLogout={handleLogout}
-                onAddNote={onAddNote}
-                notes={notes}
-                onDeleteNote={onDeleteNote}
-                activeNote={activeNote}
-                setActiveNote={setActiveNote}
-                onUpdateCheckbox={onUpdateCheckbox}
-              />
-            </div>
-          } /> */}
-
-        </Routes>
-      </div>
+              </>}
+            />
+            <Route path="/voice-settings" element={
+              <>
+                <div className='main'>
+                  <VoiceSettings />
+                </div>
+              </>}
+            />
+          </Routes>
+        </div>
+      </VoiceSettingsProvider>
     </BrowserRouter>
   )
 }
