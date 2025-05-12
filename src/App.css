@@ -34,7 +34,7 @@ body {
 }
 
 .app-sidebar-nav {
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .app-sidebar-nav a {
@@ -131,14 +131,34 @@ input[type="text"]:focus {
   }
 
   .app-sidebar {
-    width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid #e0e0e0;
+    position: fixed;
+    left: -100%;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    z-index: 1000;
+    background: white;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .app-sidebar.active {
+    left: 0;
+  }
+
+  .sidebar-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
   }
 
   .main {
     padding: 10px;
+    margin-top: 60px;
   }
 }
 
@@ -156,4 +176,45 @@ input[type="text"]:focus {
 
 .fade-in {
   animation: fadeIn 0.3s ease-out;
+}
+
+.app {
+  display: flex;
+  height: 100vh;
+  position: relative;
+}
+
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 8px;
+}
+
+.sidebar-toggle:hover {
+  background: #f5f5f5;
+}
+
+.sidebar-toggle svg {
+  width: 24px;
+  height: 24px;
+  color: #333;
+}
+
+@media screen and (max-width: 768px) {
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

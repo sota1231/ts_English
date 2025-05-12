@@ -20,7 +20,8 @@ function App() {
   const [user, setUser] = useState(null);
   const [wordId, setWordId] = useState(null);
   const [notes, setNotes] = useState([]);
-  const [activeNote, setActiveNote] = useState(false);
+  const [activeNote, setActiveNote] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // 認証状態の監視
   useEffect(() => {
@@ -105,6 +106,10 @@ function App() {
     app.classList.toggle('hidden');
   }
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   // ログインしていない場合はログインコンポーネントを表示
   if (!user) {
     return <Login />;
@@ -114,6 +119,15 @@ function App() {
     <BrowserRouter>
       <VoiceSettingsProvider>
         <div className='App'>
+          <button 
+            className="sidebar-toggle" 
+            onClick={toggleSidebar}
+            aria-label="メニューを開く"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
           <Sidebar
             userName={user.displayName}
             handleLogout={handleLogout}
@@ -121,8 +135,9 @@ function App() {
             activeNote={activeNote}
             setActiveNote={setActiveNote}
             setWordId={setWordId}
+            isOpen={isSidebarOpen}
+            setIsOpen={setIsSidebarOpen}
           />
-          <div className='open' onClick={display}>閉<br />じ<br />る</div>
           <Routes>
             <Route path="/words/:wordsId" element={
               wordId == null ? (
