@@ -229,6 +229,7 @@ button {
   border-color: #4CAF50;
 }
 
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
 @media screen and (max-width: 768px) {
   .sidebar-toggle {
     display: flex;
@@ -260,7 +261,7 @@ button {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, -0.3);
     z-index: -1;
     backdrop-filter: blur(2px);
   }
@@ -281,6 +282,7 @@ button {
 
   .app-sidebar-nav a {
     padding: 10px;
+    margin-bottom: 0px;
   }
 
   .advice {
@@ -291,6 +293,9 @@ button {
     margin: 10px;
   }
 }
+
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+
 
 .voice-settings-button {
     width: 100%;

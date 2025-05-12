@@ -101,7 +101,7 @@ const Sidebar = ({
           </svg>
           音声設定
         </Link>
-        <div className='advice'>
+        {/* <div className='advice'>
           <span>聞き取れない原因は２つ</span><br></br>
           ①知らない単語・短文　→　短文を覚える<br></br>
           ②正しい発音を知らない　→　リンキング、シャドーイング<br></br>
@@ -118,7 +118,7 @@ const Sidebar = ({
           ②ある程度できるようになったら①の日本語と英語で紐づけず<br></br>
           イメージと英語で紐づけをする<br></br>
           
-        </div>
+        </div> */}
       </div>
     </div>
   )
