@@ -1,12 +1,14 @@
-import { signInWithPopup } from "firebase/auth";
+import { browserLocalPersistence, setPersistence, signInWithPopup } from "firebase/auth";
 import { auth, provider } from "../firebase";
 
 const Login = () => {
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .catch((error) => {
-        console.error(error);
-      });
+  const signInWithGoogle = async () => {
+    try {
+      await setPersistence(auth, browserLocalPersistence);
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // cssはApp.jsx
