@@ -119,8 +119,8 @@ function App() {
     <BrowserRouter>
       <VoiceSettingsProvider>
         <div className='App'>
-          <button 
-            className="sidebar-toggle" 
+          <button
+            className="sidebar-toggle"
             onClick={toggleSidebar}
             aria-label="メニューを開く"
           >
@@ -139,34 +139,39 @@ function App() {
             setIsOpen={setIsSidebarOpen}
           />
           <Routes>
+            <Route path="/" element={
+              <div className='no-folder'>
+                <div className='child'>
+                  ←フォルダが選択されていません
+                </div>
+              </div>
+            } />
             <Route path="/words/:wordsId" element={
-              wordId == null ? (
-                <div className='no-active-note'>←フォルダが選択されていません</div>
-              ) : (
-                <>
-                  <div className='main'>
-                    <ErrorBoundary>
-                      <InputField
-                        activeNote={getActiveNote()}
-                        onUpdateNote={onUpdateNote}
-                      />
-                    </ErrorBoundary>
 
-                    <Wordlist
+              <>
+                <div className='main'>
+                  <ErrorBoundary>
+                    <InputField
+                      activeNote={getActiveNote()}
                       onUpdateNote={onUpdateNote}
-                      userName={user.displayName}
-                      handleLogout={handleLogout}
-                      onAddNote={onAddNote}
-                      notes={notes}
-                      onDeleteNote={onDeleteNote}
-                      activeNote={activeNote}
-                      setActiveNote={setActiveNote}
-                      onUpdateCheckbox={onUpdateCheckbox}
-                      wordId={wordId}
                     />
-                  </div>
-                </>
-              )
+                  </ErrorBoundary>
+
+                  <Wordlist
+                    onUpdateNote={onUpdateNote}
+                    userName={user.displayName}
+                    handleLogout={handleLogout}
+                    onAddNote={onAddNote}
+                    notes={notes}
+                    onDeleteNote={onDeleteNote}
+                    activeNote={activeNote}
+                    setActiveNote={setActiveNote}
+                    onUpdateCheckbox={onUpdateCheckbox}
+                    wordId={wordId}
+                  />
+                </div>
+              </>
+
             } />
             <Route path="/listening" element={
               <>

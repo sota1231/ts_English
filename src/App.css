@@ -6,7 +6,7 @@
 }
 
 /* Login.jsx */
-.login{
+.login {
   height: 100vh;
   position: relative;
 }
@@ -24,9 +24,9 @@ body {
   line-height: 1.6;
   color: #333;
   background: #f0f2f5;
-  background-image: 
-    linear-gradient(120deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%),
-    linear-gradient(60deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+  background-image:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%),
+    linear-gradient(60deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%);
   min-height: 100vh;
 }
 
@@ -35,6 +35,22 @@ body {
   height: 100vh;
   transition: all 0.3s ease;
 }
+
+/* フォルダ未選択 */
+.no-folder {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+.no-folder>.child {
+  position: absolute;
+  top: 30%;
+  left: 5%;
+  height: 20vh;
+  font-size: 2rem;
+  color: #999;
+}
+
 
 /* サイドバーのスタイル */
 .app-sidebar {
@@ -149,6 +165,12 @@ input[type="text"]:focus {
     flex-direction: column;
   }
 
+  .no-folder>.child {
+    top: 2.5%;
+    left: 15%;
+    font-size: 1.5rem;
+  }
+
   .app-sidebar {
     position: fixed;
     left: -100%;
@@ -178,7 +200,7 @@ input[type="text"]:focus {
   }
 
   /* サイドバーがアクティブ時のメインコンテンツ */
-  .app-sidebar.active ~ .main {
+  .app-sidebar.active~.main {
     filter: brightness(0.4);
     transition: filter 0.3s ease;
   }
@@ -205,6 +227,7 @@ input[type="text"]:focus {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -253,5 +276,14 @@ input[type="text"]:focus {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+
+/* レスポンシブデザイン */
+@media screen and (max-width: 480px) {
+  .no-folder>.child {
+    top: 4%;
+    left: 25%;
+    font-size: 0.8rem;
   }
 }
