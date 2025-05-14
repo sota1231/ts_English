@@ -134,10 +134,6 @@
         align-items: stretch;
     }
 
-    .app-wordlist-header h1 {
-        margin-bottom: 10px;
-    }
-
     .app-wordlist-notes {
         grid-template-columns: 1fr;
     }
