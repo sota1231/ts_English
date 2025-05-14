@@ -14,7 +14,6 @@ import ErrorBoundary from './components/ErrorBoundary'
 import { Listening } from './components/Listening'
 import { VoiceSettingsProvider } from './contexts/VoiceSettingsContext'
 import VoiceSettings from './components/VoiceSettings'
-import { browserLocalPersistence, setPersistence } from 'firebase/auth'
 
 function App() {
   // const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")) || []);
@@ -28,7 +27,6 @@ function App() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
-      setPersistence(auth, browserLocalPersistence);
     });
 
     return () => unsubscribe();
