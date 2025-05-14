@@ -5,7 +5,6 @@ import { Link, useLocation } from 'react-router-dom';
 const Sidebar = ({
   activeNote, setActiveNote,
   userName, handleLogout,
-  display,
   setWordId,
   isOpen,
   setIsOpen

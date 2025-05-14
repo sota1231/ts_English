@@ -99,13 +99,7 @@ function App() {
     });
   };
 
-  // 「＜」押下でレイアウトを動かす
-  const display = () => {
-    console.log('aaa')
-    const app = document.querySelector('.App');
-    app.classList.toggle('hidden');
-  }
-
+  // 「三」押下でレイアウトを動かす
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -131,7 +125,6 @@ function App() {
           <Sidebar
             userName={user.displayName}
             handleLogout={handleLogout}
-            display={display}
             activeNote={activeNote}
             setActiveNote={setActiveNote}
             setWordId={setWordId}
