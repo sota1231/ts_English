@@ -81,6 +81,7 @@ const Sidebar = ({
         <Link
           to="/listening"
           className={location.pathname === '/listening' ? 'active' : ''}
+          onClick={() => setIsOpen(false)}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
@@ -92,6 +93,7 @@ const Sidebar = ({
         <Link
           to="/voice-settings"
           className={location.pathname === '/voice-settings' ? 'active' : ''}
+          onClick={() => setIsOpen(false)}
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M11 5L6 9H2v6h4l5 4V5z" />
