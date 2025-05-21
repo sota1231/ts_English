@@ -8,18 +8,11 @@ const Wordlist = ({
     onDeleteNote,
     activeNote,
     setActiveNote,
-    userName,
-    handleLogout,
     onUpdateCheckbox,
-    onUpdateNote,
     wordId,
 }) => {
     const { voiceSettings } = useVoiceSettings();
-    const [showVoiceSettings, setShowVoiceSettings] = useState(false);
     const [csvInputKey, setCsvInputKey] = useState(Date.now());
-
-    console.log('aaa' + wordId)
-
 
     // 読み上げ機能の追加　ーーーーーーーーーーーーーーーーーーーー
     const speakEnglish = (text) => {
@@ -27,7 +20,6 @@ const Wordlist = ({
         if (window.responsiveVoice) {
             window.responsiveVoice.cancel();
         }
-        console.log('読み上げ' + text);
         
         // ResponsiveVoiceを使用して音声読み上げ
         if (window.responsiveVoice) {
@@ -47,17 +39,8 @@ const Wordlist = ({
         }
     };
 
-    // 音声設定の変更ハンドラー
-    const handleVoiceSettingChange = (setting, value) => {
-        setVoiceSettings(prev => ({
-            ...prev,
-            [setting]: value
-        }));
-    };
-
     // ページが読み込まれたときに音声を初期化
     useEffect(() => {
-        // ResponsiveVoiceの初期化確認
         if (window.responsiveVoice) {
             console.log('ResponsiveVoiceが利用可能です');
         } else {
@@ -77,15 +60,15 @@ const Wordlist = ({
         // データ行を追加
         notes.forEach(note => {
             csvData.push([
-                `"${(note.english || '').replace(/"/g, '""')}"`,
-                `"${(note.japanese || '').replace(/"/g, '""')}"`,
+                `"${(note.english || '').replace(/"/g, '""')}"`, // /"/で「"」を探す、gがないと１つだけで処理が終わる
+                `"${(note.japanese || '').replace(/"/g, '""')}"`, // 「"」を「""」に全て変える
                 note.remenber ? true : false,
                 new Date(note.createDate).toLocaleDateString()
             ]);
         });
 
         // CSV形式の文字列に変換
-        const csvString = csvData.map(row => row.join(',')).join('\n');
+        const csvString = csvData.map(row => row.join(',')).join('\n'); // 行ごとに配列を「,」区切りで１つの文字列にしたあと、行もなくし全ての配列が１つの文字列にする
 
         // BOMを追加してShift-JISでエンコード
         const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
@@ -131,8 +114,8 @@ const Wordlist = ({
                     if (!rows[i].trim()) continue; // 空行をスキップ
 
                     const columns = rows[i].split(',');
-                    const englishText = columns[0]?.trim().replace(/^"|"$/g, '').replace(/""/g, '"'); // 先頭と末尾のダブルクオートを削除
-                    const japaneseText = columns[1]?.trim().replace(/^"|"$/g, '').replace(/""/g, '"'); // 先頭と末尾のダブルクオートを削除
+                    const englishText = columns[0]?.trim().replace(/^"|"$/g, '').replace(/""/g, '"'); // 先頭(/^)と末尾($/)のダブルクオートを削除
+                    const japaneseText = columns[1]?.trim().replace(/^"|"$/g, '').replace(/""/g, '"'); // 「""」を「"」に置換
 
                     if (!englishText) continue; // 英語が空の行はスキップ
 

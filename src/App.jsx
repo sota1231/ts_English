@@ -17,11 +17,11 @@ import VoiceSettings from './components/VoiceSettings'
 
 function App() {
   // const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")) || []);
-  const [user, setUser] = useState(null);
-  const [wordId, setWordId] = useState(null);
-  const [notes, setNotes] = useState([]);
-  const [activeNote, setActiveNote] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [user, setUser] = useState(null); // 認証情報保持
+  const [wordId, setWordId] = useState(null); // param保持
+  const [notes, setNotes] = useState([]); // 一覧データ（userとparamでwhere）
+  const [activeNote, setActiveNote] = useState(null); // 選択中の英単語（レコード）を格納
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); //　サイドバーの開閉
 
   // 認証状態の監視
   useEffect(() => {
@@ -43,7 +43,7 @@ function App() {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const notesData = [];
       querySnapshot.forEach((doc) => {
-        notesData.push({ ...doc.data(), id: doc.id });
+        notesData.push({ ...doc.data(), id: doc.id }); // idデータを追加
       });
       setNotes(notesData);
     });
@@ -52,7 +52,7 @@ function App() {
   }, [user, wordId]);
 
 
-  // 新規英単語・英文作成
+  // 新規英単語作成
   const onAddNote = async (noteData) => {
     const newNote = {
       english: noteData?.english || '',
@@ -63,7 +63,7 @@ function App() {
       userId: user.uid,  // ユーザーIDを追加
       id: wordId
     };
-    await addDoc(collection(db, "English_words"), newNote);
+    await addDoc(collection(db, "English_words"), newNote); // 登録処理
   };
 
   // ログアウト機能
@@ -73,19 +73,18 @@ function App() {
 
   // チェックボックスの更新処理
   const onUpdateCheckbox = async (noteId, isChecked) => {
-    const noteRef = doc(db, "English_words", noteId);
-    await updateDoc(noteRef, {
-      remenber: isChecked
-    });
+    const noteRef = doc(db, "English_words", noteId); // dbのデータで一致するデータを特定する
+    await updateDoc(noteRef, {remenber: isChecked}); // 更新処理
+
   };
 
   // 英単語・英文削除
   const onDeleteNote = async (id) => {
-    await deleteDoc(doc(db, "English_words", id));
+    await deleteDoc(doc(db, "English_words", id)); // 削除処理
   };
 
+  // findは一致したデータを取得する関数
   const getActiveNote = () => {
-    // findは一致したデータを取得する関数
     return notes.find((note) => note.id === activeNote);
   }
 
@@ -123,10 +122,8 @@ function App() {
             </svg>
           </button>
           <Sidebar
-            userName={user.displayName}
+            // userName={user.displayName}
             handleLogout={handleLogout}
-            activeNote={activeNote}
-            setActiveNote={setActiveNote}
             setWordId={setWordId}
             isOpen={isSidebarOpen}
             setIsOpen={setIsSidebarOpen}
@@ -151,9 +148,6 @@ function App() {
                   </ErrorBoundary>
 
                   <Wordlist
-                    onUpdateNote={onUpdateNote}
-                    userName={user.displayName}
-                    handleLogout={handleLogout}
                     onAddNote={onAddNote}
                     notes={notes}
                     onDeleteNote={onDeleteNote}

@@ -4,15 +4,16 @@ import { useVoiceSettings } from '../contexts/VoiceSettingsContext';
 
 export const Listening = ({ notes, onUpdateCheckbox }) => {
   const [randomWord, setRandomWord] = useState(null);
-  const [showJapanese, setShowJapanese] = useState(false);
-  const [showEnglish, setShowEnglish] = useState(false);
+  const [showJapanese, setShowJapanese] = useState(false); // 日本語表示
+  const [showEnglish, setShowEnglish] = useState(false); // 英語表示
   const { voiceSettings } = useVoiceSettings();
 
+  // notesが変わった時だけ中身（メモ）が変化・問題の選定
   const getRandomUnrememberedWord = useCallback(() => {
     const unrememberedWords = notes.filter(note => !note.remenber);
 
     if (unrememberedWords.length > 0) {
-      const randomIndex = Math.floor(Math.random() * unrememberedWords.length);
+      const randomIndex = Math.floor(Math.random() * unrememberedWords.length); // 0以上1未満＊未暗記のレコードの数＝＞小数点以下は切り捨て
       setRandomWord(unrememberedWords[randomIndex]);
       // 新しい単語が選ばれたら両方とも非表示に
       setShowJapanese(false);
@@ -24,6 +25,7 @@ export const Listening = ({ notes, onUpdateCheckbox }) => {
     }
   }, [notes]);
 
+  //TODO 
   useEffect(() => {
     getRandomUnrememberedWord();
   }, [getRandomUnrememberedWord]);
@@ -63,6 +65,7 @@ export const Listening = ({ notes, onUpdateCheckbox }) => {
     }
   }, []);
 
+  // TODO
   const markAsRemembered = () => {
     if (randomWord) {
       onUpdateCheckbox(randomWord.id, true);

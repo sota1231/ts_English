@@ -2,13 +2,8 @@ import { useEffect, React } from 'react'
 import './Sidebar.css';
 import { Link, useLocation } from 'react-router-dom';
 
-const Sidebar = ({
-  activeNote, setActiveNote,
-  userName, handleLogout,
-  setWordId,
-  isOpen,
-  setIsOpen
-}) => {
+const Sidebar = ({handleLogout, setWordId, isOpen, setIsOpen}) => {
+  
   const location = useLocation();
   const pathParts = location.pathname.split('/');
   const wordId = pathParts[2];

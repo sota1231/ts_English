@@ -1,9 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
-const VoiceSettingsContext = createContext();
+const VoiceSettingsContext = createContext(); // グローバルに共有できる準備
 
 export const VoiceSettingsProvider = ({ children }) => {
-    // ローカルストレージから設定を読み込む
     const loadSettings = () => {
         const savedSettings = localStorage.getItem('voiceSettings');
         return savedSettings ? JSON.parse(savedSettings) : {
@@ -15,11 +14,7 @@ export const VoiceSettingsProvider = ({ children }) => {
 
     const [voiceSettings, setVoiceSettings] = useState(loadSettings);
 
-    // 設定が変更されたらローカルストレージに保存
-    useEffect(() => {
-        localStorage.setItem('voiceSettings', JSON.stringify(voiceSettings));
-    }, [voiceSettings]);
-
+    // ①発火したら引数（設定変更箇所）のみ変更してあとはそのまま　voiceSettingsが変更されるのでuseEffectが発火
     const updateVoiceSettings = (setting, value) => {
         setVoiceSettings(prev => ({
             ...prev,
@@ -27,6 +22,12 @@ export const VoiceSettingsProvider = ({ children }) => {
         }));
     };
 
+    // ②設定が変更されたらローカルストレージに保存
+    useEffect(() => {
+        localStorage.setItem('voiceSettings', JSON.stringify(voiceSettings));
+    }, [voiceSettings]);
+
+    // voiceSettingsとupdateVoiceSettingsを子コンポーネントで使えるように設定
     return (
         <VoiceSettingsContext.Provider value={{ voiceSettings, updateVoiceSettings }}>
             {children}
@@ -34,6 +35,7 @@ export const VoiceSettingsProvider = ({ children }) => {
     );
 };
 
+// カスタムフック作成、子コンポーネントでuseState()の要領で使用する
 export const useVoiceSettings = () => {
     const context = useContext(VoiceSettingsContext);
     if (!context) {
