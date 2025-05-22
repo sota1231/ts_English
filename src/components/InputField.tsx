@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import debounce from 'lodash/debounce';
 import "./InputField.css"
+import { InputFieldPropsType, UpdatedNoteType } from '../type';
 
-const InputField = ({ activeNote, onUpdateNote }) => {
+const InputField: React.FC<InputFieldPropsType> = ({ activeNote, onUpdateNote }) => {
   // ローカルステート
   const [localEnglish, setLocalEnglish] = useState(activeNote?.english || "");
   const [localJapanese, setLocalJapanese] = useState(activeNote?.japanese || "");
@@ -17,7 +18,7 @@ const InputField = ({ activeNote, onUpdateNote }) => {
 
   // Firebaseへの保存を遅延させる
   const saveToFirebase = useCallback(
-    debounce((updatedNote) => {
+    debounce((updatedNote: UpdatedNoteType) => {
       onUpdateNote(updatedNote);
     }, 500),
     [onUpdateNote]
@@ -54,7 +55,6 @@ const InputField = ({ activeNote, onUpdateNote }) => {
           <strong>英語：</strong>
           <textarea
             id='english-textarea'
-            type="text"
             placeholder='英語を記入'
             value={localEnglish}
             onChange={handleEnglishChange}

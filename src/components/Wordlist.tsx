@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import './Wordlist.css';
 import { useVoiceSettings } from '../contexts/VoiceSettingsContext';
+import { Note, WordlistProps } from '../type.tsx'
 
-const Wordlist = ({
+const Wordlist: React.FC<WordlistProps> = ({
     onAddNote,
     notes,
     onDeleteNote,
@@ -10,17 +11,18 @@ const Wordlist = ({
     setActiveNote,
     onUpdateCheckbox,
     wordId,
+    onAddNoteCSV
 }) => {
     const { voiceSettings } = useVoiceSettings();
-    const [csvInputKey, setCsvInputKey] = useState(Date.now());
+    const [csvInputKey, setCsvInputKey] = useState<number>(Date.now());
 
     // 読み上げ機能の追加　ーーーーーーーーーーーーーーーーーーーー
-    const speakEnglish = (text) => {
+    const speakEnglish = (text: string) => {
         // 既存の音声を停止
         if (window.responsiveVoice) {
             window.responsiveVoice.cancel();
         }
-        
+
         // ResponsiveVoiceを使用して音声読み上げ
         if (window.responsiveVoice) {
             window.responsiveVoice.speak(text, "US English Female", {
@@ -62,7 +64,7 @@ const Wordlist = ({
             csvData.push([
                 `"${(note.english || '').replace(/"/g, '""')}"`, // /"/で「"」を探す、gがないと１つだけで処理が終わる
                 `"${(note.japanese || '').replace(/"/g, '""')}"`, // 「"」を「""」に全て変える
-                note.remenber ? true : false,
+                note.remember ? "true" : "false",
                 new Date(note.createDate).toLocaleDateString()
             ]);
         });
@@ -77,7 +79,7 @@ const Wordlist = ({
         // ダウンロードリンクを作成
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        const csv_title = wordId == '1' ? '日常会話１' : wordId == '2' ? '日常会話２' : wordId == '3' ? '旅行先' : wordId == '4' ? '映画' : 'その他';
+        const csv_title = wordId === '1' ? '日常会話１' : wordId === '2' ? '日常会話２' : wordId === '3' ? '旅行先' : wordId === '4' ? '映画' : 'その他';
         link.download = `${csv_title}_${new Date().toLocaleDateString()}.csv`;
 
         // リンクをクリックしてダウンロード開始
@@ -87,8 +89,11 @@ const Wordlist = ({
     };
 
     // CSV入力処理　ーーーーーーーーーーーーーーーーーーーーーーーー
-    const importFromCSV = (e) => {
-        const file = e.target.files[0];
+    const importFromCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files || files.length === 0)  return; // null対策
+        
+        const file = files[0];
 
         // 確認ダイアログを表示
         if (!window.confirm('既存のデータがすべて削除され、CSVのデータで上書きされます。よろしいですか？')) {
@@ -101,39 +106,44 @@ const Wordlist = ({
         reader.onload = async (event) => {
             try {
                 // BOMを除去してCSVを行に分割
-                const csvText = event.target.result.replace(/^\uFEFF/, '');
-                const rows = csvText.split('\n');
+                const Text = event?.target?.result;
+                if (typeof Text === 'string') {  // 型をstringに絞るため対策
+                    const csvText = Text.replace(/^\uFEFF/, '');
+                    const rows = csvText.split('\n');
 
-                // 既存の英単語・英文をすべて削除
-                notes.forEach(note => {
-                    onDeleteNote(note.id);
-                });
+                    // 既存の英単語・英文をすべて削除
+                    notes.forEach(note => {
+                        onDeleteNote(note.id);
+                    });
 
-                // ヘッダー行をスキップしてデータ処理
-                for (let i = 1; i < rows.length; i++) {
-                    if (!rows[i].trim()) continue; // 空行をスキップ
+                    // ヘッダー行をスキップしてデータ処理
+                    for (let i = 1; i < rows.length; i++) {
+                        if (!rows[i].trim()) continue; // 空行をスキップ
 
-                    const columns = rows[i].split(',');
-                    const englishText = columns[0]?.trim().replace(/^"|"$/g, '').replace(/""/g, '"'); // 先頭(/^)と末尾($/)のダブルクオートを削除
-                    const japaneseText = columns[1]?.trim().replace(/^"|"$/g, '').replace(/""/g, '"'); // 「""」を「"」に置換
+                        const columns = rows[i].split(',');
+                        const englishText = columns[0]?.trim().replace(/^"|"$/g, '').replace(/""/g, '"'); // 先頭(/^)と末尾($/)のダブルクオートを削除
+                        const japaneseText = columns[1]?.trim().replace(/^"|"$/g, '').replace(/""/g, '"'); // 「""」を「"」に置換
 
-                    if (!englishText) continue; // 英語が空の行はスキップ
+                        if (!englishText) continue; // 英語が空の行はスキップ
 
-                    // 新規英単語・英文を作成
-                    const newNote = {
-                        id: wordId,
-                        // id: Date.now().toString(),
-                        english: englishText,
-                        japanese: japaneseText || '',
-                        createDate: Date.now(),
-                        modDate: Date.now(),
-                        checked: false
-                    };
+                        // 新規英単語・英文を作成
+                        const newNote: Note = {
+                            id: wordId ? wordId.toString() : '',
+                            // id: Date.now().toString(),
+                            english: englishText,
+                            japanese: japaneseText || '',
+                            createDate: Date.now(),
+                            modDate: Date.now(),
+                            remember: false
+                        };
 
-                    await onAddNote(newNote);
+                        await onAddNoteCSV(newNote);
+                    }
+                    alert('CSVファイルのインポートが完了しました');
+                    setCsvInputKey(Date.now());
+                } else {
+                    console.error('ファイルの読み込み結果が文字列ではありません');
                 }
-                alert('CSVファイルのインポートが完了しました');
-                setCsvInputKey(Date.now());
             } catch (error) {
                 console.error('CSVの処理中にエラーが発生しました:', error);
                 alert('CSVファイルの処理中にエラーが発生しました');
@@ -141,6 +151,7 @@ const Wordlist = ({
         };
 
         reader.readAsText(file);
+
     };
 
 
@@ -150,7 +161,7 @@ const Wordlist = ({
         <div className='app-wordlist'>
             <div className='app-wordlist-header'>
                 <h1>リスト</h1>
-                <button className='new_post' onClick={onAddNote}>新規作成</button>
+                <button className='new_post' onClick={() => onAddNote()}>新規作成</button>
                 <button className='csv_output' onClick={exportToCSV}>CSV出力</button>
                 <input
                     key={csvInputKey}
@@ -161,7 +172,7 @@ const Wordlist = ({
                     id="csv-input"
                 />
                 <button className='csv_input'
-                    onClick={() => document.getElementById('csv-input').click()}>
+                    onClick={() => document.getElementById('csv-input')!.click()}>
                     CSVからインポート
                 </button>
             </div>
@@ -177,7 +188,7 @@ const Wordlist = ({
                         >
                             <input
                                 type="checkbox"
-                                checked={note.remenber}
+                                checked={note.remember}
                                 onChange={(e) => onUpdateCheckbox(note.id, e.target.checked)}
                             />
                             <button
