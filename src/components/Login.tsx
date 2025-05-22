@@ -5,7 +5,14 @@ const Login = () => {
   const signInWithGoogle = async (): Promise<void> => {
     try {
       await setPersistence(auth, browserLocalPersistence);
-      await signInWithPopup(auth, provider);
+      await signInWithPopup(auth, provider).then((result) => {
+      // ログイン成功
+      console.log("ログイン成功:", result.user);
+    })
+    .catch((error) => {
+      // エラー処理
+      console.error("ログインエラー:", error);
+    });;
     } catch (error: unknown) {
       console.error(error);
     }

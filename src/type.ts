@@ -73,7 +73,7 @@ export interface ListeningPropsType {
 // InputFieldProps
 export interface InputFieldPropsType {
     activeNote: Note | undefined,
-    onUpdateNote: (UpdatedNoteType) => Promise<void>;
+    onUpdateNote: (UpdatedNoteType:UpdatedNoteType) => Promise<void>;
 }
 export type UpdatedNoteType = {
     id: string,
