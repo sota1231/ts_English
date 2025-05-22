@@ -2,11 +2,11 @@ import { browserLocalPersistence, setPersistence, signInWithPopup } from "fireba
 import { auth, provider } from "../firebase";
 
 const Login = () => {
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (): Promise<void> => {
     try {
       await setPersistence(auth, browserLocalPersistence);
       await signInWithPopup(auth, provider);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(error);
     }
   };

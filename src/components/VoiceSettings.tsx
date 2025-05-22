@@ -1,11 +1,12 @@
 import React from 'react';
 import { useVoiceSettings } from '../contexts/VoiceSettingsContext';
 import './VoiceSettings.css';
+import { VoiceSettingsType, VoiceSettingsContextType } from "../type";
 
-const VoiceSettings = () => {
+const VoiceSettings: React.FC = () => {
     const { voiceSettings, updateVoiceSettings } = useVoiceSettings();
 
-    const speakEnglish = (text) => {
+    const speakEnglish = (text: string) => {
         if (window.responsiveVoice) {
             window.responsiveVoice.cancel();
         }
@@ -18,7 +19,7 @@ const VoiceSettings = () => {
                 onend: () => {
                     console.log('読み上げ完了');
                 },
-                onerror: (error) => {
+                onerror: (error: unknown) => {
                     console.error('読み上げエラー:', error);
                 }
             });

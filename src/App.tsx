@@ -4,24 +4,22 @@ import InputField from './components/InputField'
 import Login from './components/Login'
 import Wordlist from './components/Wordlist'
 import { useEffect, useState } from 'react'
-import uuid from 'react-uuid'
 import { auth, db } from "./firebase";
-import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, query, where } from "firebase/firestore";
-import Articlelist from './components/Articlelist'
-import ArticlelistInputField from './components/ArticlelistInputField'
+import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, query, where, DocumentData } from "firebase/firestore";
 import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary'
 import { Listening } from './components/Listening'
 import { VoiceSettingsProvider } from './contexts/VoiceSettingsContext'
 import VoiceSettings from './components/VoiceSettings'
+import { User } from "firebase/auth"
+import { Note, NewNoteData } from "./type"
 
 function App() {
-  // const [notes, setNotes] = useState(JSON.parse(localStorage.getItem("notes")) || []);
-  const [user, setUser] = useState(null); // 認証情報保持
-  const [wordId, setWordId] = useState(null); // param保持
-  const [notes, setNotes] = useState([]); // 一覧データ（userとparamでwhere）
-  const [activeNote, setActiveNote] = useState(null); // 選択中の英単語（レコード）を格納
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); //　サイドバーの開閉
+  const [user, setUser] = useState<User | null>(null); // 認証情報保持
+  const [wordId, setWordId] = useState<string | null>(null); // param保持
+  const [notes, setNotes] = useState<Note[]| []>([]); // 一覧データ（userとparamでwhere）
+  const [activeNote, setActiveNote] = useState<string | null>(null); // 選択中の英単語のidを格納
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false); //　サイドバーの開閉
 
   // 認証状態の監視
   useEffect(() => {
@@ -41,9 +39,10 @@ function App() {
       where("id", "==", wordId)
     );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const notesData = [];
+      const notesData: Note[] = [];
       querySnapshot.forEach((doc) => {
-        notesData.push({ ...doc.data(), id: doc.id }); // idデータを追加
+        const data = doc.data() as Omit<Note, "id">; //　firebaseの.data()にはidを含まない為肩からidを外す
+        notesData.push({ ...data, id: doc.id }); // idデータを追加
       });
       setNotes(notesData);
     });
@@ -53,14 +52,28 @@ function App() {
 
 
   // 新規英単語作成
-  const onAddNote = async (noteData) => {
+  const onAddNote = async () => {
+    const newNote = {
+      english: '',
+      japanese: '',
+      modDate: Date.now(),
+      createDate: Date.now(),
+      remember: false,
+      userId: user?.uid || '',  // ユーザーIDを追加
+      id: wordId
+    };
+    await addDoc(collection(db, "English_words"), newNote); // 登録処理
+  };
+
+  // 新規英単語作成
+  const onAddNoteCSV = async (noteData: NewNoteData) => {
     const newNote = {
       english: noteData?.english || '',
       japanese: noteData?.japanese || '',
       modDate: Date.now(),
       createDate: Date.now(),
-      remenber: false,
-      userId: user.uid,  // ユーザーIDを追加
+      remember: false,
+      userId: user?.uid || '',  // ユーザーIDを追加
       id: wordId
     };
     await addDoc(collection(db, "English_words"), newNote); // 登録処理
@@ -72,9 +85,9 @@ function App() {
   };
 
   // チェックボックスの更新処理
-  const onUpdateCheckbox = async (noteId, isChecked) => {
+  const onUpdateCheckbox = async (noteId: string, isChecked: boolean) => {
     const noteRef = doc(db, "English_words", noteId); // dbのデータで一致するデータを特定する
-    await updateDoc(noteRef, {remenber: isChecked}); // 更新処理
+    await updateDoc(noteRef, {remember: isChecked}); // 更新処理
 
   };
 
@@ -155,6 +168,7 @@ function App() {
                     setActiveNote={setActiveNote}
                     onUpdateCheckbox={onUpdateCheckbox}
                     wordId={wordId}
+                    onAddNoteCSV={onAddNoteCSV}
                   />
                 </div>
               </>

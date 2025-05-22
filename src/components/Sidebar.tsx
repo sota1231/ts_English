@@ -1,8 +1,14 @@
-import { useEffect, React } from 'react'
+import { useEffect } from 'react'
 import './Sidebar.css';
 import { Link, useLocation } from 'react-router-dom';
+import { SidebarPropsType } from '../type';
 
-const Sidebar = ({handleLogout, setWordId, isOpen, setIsOpen}) => {
+const Sidebar: React.FC<SidebarPropsType> = ({
+  handleLogout, 
+  setWordId, 
+  isOpen, 
+  setIsOpen
+}) => {
   
   const location = useLocation();
   const pathParts = location.pathname.split('/');
