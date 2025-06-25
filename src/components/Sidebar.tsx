@@ -34,7 +34,7 @@ const Sidebar: React.FC<SidebarPropsType> = ({
               className={wordId === '1' ? 'active' : ''}
               onClick={() => setIsOpen(false)}
             >
-              日常会話　1
+              注文編
             </Link>
 
             <Link
@@ -42,7 +42,7 @@ const Sidebar: React.FC<SidebarPropsType> = ({
               className={wordId === '2' ? 'active' : ''}
               onClick={() => setIsOpen(false)}
             >
-              日常会話　2
+              交通編
             </Link>
 
             <Link
