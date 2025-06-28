@@ -154,6 +154,43 @@
     background-color: #45a049;
 }
 
+.word-id-selector {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.word-id-selector label {
+  display: block;
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.word-id-selector select {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.word-id-selector select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.word-id-selector select:hover {
+  border-color: #4CAF50;
+}
+
 @media screen and (max-width: 768px) {
   .listening-container {
     padding: 10px;

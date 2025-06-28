@@ -1,3 +1,4 @@
+import React from 'react'
 import './App.css'
 import Sidebar from './components/Sidebar'
 import InputField from './components/InputField'
@@ -18,6 +19,7 @@ function App() {
   const [user, setUser] = useState<User | null>(null); // 認証情報保持
   const [wordId, setWordId] = useState<string | null>(null); // param保持
   const [notes, setNotes] = useState<Note[]| []>([]); // 一覧データ（userとparamでwhere）
+  const [listeningNotes, setListeningNotes] = useState<Note[]| []>([]); // リスニング用のnotes（userとwordIdでwhere）
   const [activeNote, setActiveNote] = useState<string | null>(null); // 選択中の英単語のidを格納
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false); //　サイドバーの開閉
 
@@ -50,6 +52,24 @@ function App() {
     return () => unsubscribe();
   }, [user, wordId]);
 
+  // リスニング用の英単語・英文の取得（全てのwordId）
+  useEffect(() => {
+    if (!user) return;
+    const q = query(
+      collection(db, "English_words"),
+      where("userId", "==", user.uid)
+    );
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const notesData: Note[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data() as Note;
+        notesData.push({ ...data});
+      });
+      setListeningNotes(notesData);
+    });
+
+    return () => unsubscribe();
+  }, [user]);
 
   // 新規英単語作成
   const onAddNote = async () => {
@@ -178,7 +198,7 @@ function App() {
               <>
                 <div className='main'>
                   <Listening
-                    notes={notes}
+                    notes={listeningNotes}
                     onUpdateCheckbox={onUpdateCheckbox}
                   />
                 </div>

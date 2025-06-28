@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import "./Listening.css"
 import { useVoiceSettings } from '../contexts/VoiceSettingsContext';
 import { ListeningPropsType, Note } from '../type';
@@ -7,12 +7,22 @@ export const Listening: React.FC<ListeningPropsType> = ({ notes, onUpdateCheckbo
   const [randomWord, setRandomWord] = useState<null | Note>(null);
   const [showJapanese, setShowJapanese] = useState<boolean>(false); // 日本語表示
   const [showEnglish, setShowEnglish] = useState<boolean>(false); // 英語表示
+  const [selectedWordId, setSelectedWordId] = useState<string>('1'); // 選択されたwordId
   const { voiceSettings } = useVoiceSettings();
+
+  // 選択されたwordIdでフィルタリングされたnotes
+const filteredNotes = selectedWordId !== "0"
+  ? notes.filter(note => note.id == selectedWordId)
+  : notes;
+    console.log("filteredNotes: " +filteredNotes.length)
+  // console.log("Notes: " +notes)
+  console.log("selectedWordId: " +selectedWordId)
+  // console.log("notes:", JSON.stringify(notes, null, 2));
 
   // notesが変わった時だけ中身（メモ）が変化・問題の選定
   const getRandomUnrememberedWord = useCallback(() => {
-    const unrememberedWords = notes.filter(note => !note.remember);
-
+    const unrememberedWords = filteredNotes.filter(note => !note.remember);
+    console.log("length: "+unrememberedWords.length)
     if (unrememberedWords.length > 0) {
       const randomIndex = Math.floor(Math.random() * unrememberedWords.length); // 0以上1未満＊未暗記のレコードの数＝＞小数点以下は切り捨て
       setRandomWord(unrememberedWords[randomIndex]);
@@ -24,7 +34,7 @@ export const Listening: React.FC<ListeningPropsType> = ({ notes, onUpdateCheckbo
       setRandomWord(null);
       console.log('未暗記の単語はありません');
     }
-  }, [notes]);
+  }, [selectedWordId]);
 
   useEffect(() => {
     getRandomUnrememberedWord();
@@ -74,6 +84,22 @@ export const Listening: React.FC<ListeningPropsType> = ({ notes, onUpdateCheckbo
 
   return (
     <div className="listening-container">
+      <div className="word-id-selector">
+        <label htmlFor="wordIdSelect">カテゴリを選択:</label>
+        <select
+          id="wordIdSelect"
+          value={selectedWordId}
+          onChange={(e) => setSelectedWordId(e.target.value)}
+        >
+          <option value="0">すべて</option>
+          <option value="1">注文</option>
+          <option value="2">交通</option>
+          <option value="3">旅行先会話</option>
+          <option value="4">映画</option>
+          <option value="5">単語・短文</option>
+          <option value="6">英会話</option>
+        </select>
+      </div>
       {randomWord ? (
         <>
           <div className="word-display">
