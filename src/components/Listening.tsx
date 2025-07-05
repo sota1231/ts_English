@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import "./Listening.css"
 import { useVoiceSettings } from '../contexts/VoiceSettingsContext';
-import { ListeningPropsType, Note } from '../type';
+import { ListeningPropsType, Note, NoteDoc } from '../type';
 
 export const Listening: React.FC<ListeningPropsType> = ({ notes, onUpdateCheckbox }) => {
-  const [randomWord, setRandomWord] = useState<null | Note>(null);
+  const [randomWord, setRandomWord] = useState<null | NoteDoc>(null);
   const [showJapanese, setShowJapanese] = useState<boolean>(false); // 日本語表示
   const [showEnglish, setShowEnglish] = useState<boolean>(false); // 英語表示
   const [selectedWordId, setSelectedWordId] = useState<string>('1'); // 選択されたwordId
@@ -12,11 +12,11 @@ export const Listening: React.FC<ListeningPropsType> = ({ notes, onUpdateCheckbo
 
   // 選択されたwordIdでフィルタリングされたnotes
 const filteredNotes = selectedWordId !== "0"
-  ? notes.filter(note => note.id == selectedWordId)
+  ? notes.filter(note => note.folderId == selectedWordId)
   : notes;
-    console.log("filteredNotes: " +filteredNotes.length)
+    // console.log("filteredNotes: " +filteredNotes.length)
   // console.log("Notes: " +notes)
-  console.log("selectedWordId: " +selectedWordId)
+  // console.log("selectedWordId: " +selectedWordId)
   // console.log("notes:", JSON.stringify(notes, null, 2));
 
   // notesが変わった時だけ中身（メモ）が変化・問題の選定
@@ -32,7 +32,7 @@ const filteredNotes = selectedWordId !== "0"
       console.log('今回の学習単語:', unrememberedWords[randomIndex].english);
     } else {
       setRandomWord(null);
-      console.log('未暗記の単語はありません');
+      // console.log('未暗記の単語はありません');
     }
   }, [selectedWordId]);
 
@@ -45,7 +45,7 @@ const filteredNotes = selectedWordId !== "0"
     if (window.responsiveVoice) {
       window.responsiveVoice.cancel();
     }
-    console.log('読み上げ: ' + text);
+    // console.log('読み上げ: ' + text);
     
     // ResponsiveVoiceを使用して音声読み上げ
     if (window.responsiveVoice) {
@@ -54,14 +54,14 @@ const filteredNotes = selectedWordId !== "0"
         pitch: voiceSettings.pitch,
         volume: voiceSettings.volume,
         onend: () => {
-          console.log('読み上げ完了');
+          // console.log('読み上げ完了');
         },
         onerror: (error) => {
-          console.error('読み上げエラー:', error);
+          // console.error('読み上げエラー:', error);
         }
       });
     } else {
-      console.error('ResponsiveVoiceが利用できません');
+      // console.error('ResponsiveVoiceが利用できません');
     }
   };
 
@@ -77,6 +77,7 @@ const filteredNotes = selectedWordId !== "0"
 
   const markAsRemembered = () => {
     if (randomWord) {
+      console.log('checkbox_before', randomWord.id);
       onUpdateCheckbox(randomWord.id, true);
       getRandomUnrememberedWord();
     }

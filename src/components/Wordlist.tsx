@@ -14,7 +14,7 @@ const Wordlist: React.FC<WordlistProps> = ({
     onAddNoteCSV
 }) => {
     const { voiceSettings } = useVoiceSettings();
-    const [csvInputKey, setCsvInputKey] = useState<number>(Date.now());
+    const [ csvInputKey, setCsvInputKey ] = useState<number>(Date.now());
 
     // 読み上げ機能の追加　ーーーーーーーーーーーーーーーーーーーー
     const speakEnglish = (text: string) => {
@@ -79,7 +79,7 @@ const Wordlist: React.FC<WordlistProps> = ({
         // ダウンロードリンクを作成
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        const csv_title = wordId === '1' ? '日常会話１' : wordId === '2' ? '日常会話２' : wordId === '3' ? '旅行先' : wordId === '4' ? '映画' : 'その他';
+        const csv_title = wordId === '1' ? '注文' : wordId === '2' ? '交通' : wordId === '3' ? '旅行先会話' : wordId === '4' ? '映画' : wordId === '5' ? '英単語' : '英会話';
         link.download = `${csv_title}_${new Date().toLocaleDateString()}.csv`;
 
         // リンクをクリックしてダウンロード開始
@@ -128,7 +128,7 @@ const Wordlist: React.FC<WordlistProps> = ({
 
                         // 新規英単語・英文を作成
                         const newNote: Note = {
-                            id: wordId ? wordId.toString() : '',
+                            folderId: wordId ? wordId.toString() : '',
                             // id: Date.now().toString(),
                             english: englishText,
                             japanese: japaneseText || '',

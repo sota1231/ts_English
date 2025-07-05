@@ -13,13 +13,13 @@ import { Listening } from './components/Listening'
 import { VoiceSettingsProvider } from './contexts/VoiceSettingsContext'
 import VoiceSettings from './components/VoiceSettings'
 import { User } from "firebase/auth"
-import { Note, NewNoteData } from "./type"
+import { Note, NewNoteData, NoteDoc } from "./type"
 
 function App() {
   const [user, setUser] = useState<User | null>(null); // 認証情報保持
   const [wordId, setWordId] = useState<string | null>(null); // param保持
-  const [notes, setNotes] = useState<Note[]| []>([]); // 一覧データ（userとparamでwhere）
-  const [listeningNotes, setListeningNotes] = useState<Note[]| []>([]); // リスニング用のnotes（userとwordIdでwhere）
+  const [notes, setNotes] = useState<NoteDoc[]| []>([]); // 一覧データ（userとparamでwhere）
+  const [listeningNotes, setListeningNotes] = useState<NoteDoc[]| []>([]); // リスニング用のnotes（userとwordIdでwhere）
   const [activeNote, setActiveNote] = useState<string | null>(null); // 選択中の英単語のidを格納
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false); //　サイドバーの開閉
 
@@ -38,13 +38,15 @@ function App() {
     const q = query(
       collection(db, "English_words"),
       where("userId", "==", user.uid),
-      where("id", "==", wordId)
+      where("folderId", "==", wordId)
     );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const notesData: Note[] = [];
+      const notesData: NoteDoc[] = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data() as Omit<Note, "id">; //　firebaseの.data()にはidを含まない為肩からidを外す
+        const data = doc.data() as Omit<Note, "id">; //　firebaseの.data()にはidを含まない為型からidを外す
         notesData.push({ ...data, id: doc.id }); // idデータを追加
+        // const data = doc.data() as Note;
+        // notesData.push({ ...data});
       });
       setNotes(notesData);
     });
@@ -60,10 +62,12 @@ function App() {
       where("userId", "==", user.uid)
     );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const notesData: Note[] = [];
+      const notesData: NoteDoc[] = [];
       querySnapshot.forEach((doc) => {
-        const data = doc.data() as Note;
-        notesData.push({ ...data});
+        // const data = doc.data() as Note;
+        // notesData.push({ ...data});
+        const data = doc.data() as Omit<Note, "id">; //　firebaseの.data()にはidを含まない為型からidを外す
+        notesData.push({ ...data, id: doc.id }); // idデータを追加
       });
       setListeningNotes(notesData);
     });
@@ -80,7 +84,7 @@ function App() {
       createDate: Date.now(),
       remember: false,
       userId: user?.uid || '',  // ユーザーIDを追加
-      id: wordId
+      folderId: wordId
     };
     await addDoc(collection(db, "English_words"), newNote); // 登録処理
   };
@@ -94,7 +98,7 @@ function App() {
       createDate: Date.now(),
       remember: false,
       userId: user?.uid || '',  // ユーザーIDを追加
-      id: wordId
+      folderId: wordId
     };
     await addDoc(collection(db, "English_words"), newNote); // 登録処理
   };
@@ -106,6 +110,7 @@ function App() {
 
   // チェックボックスの更新処理
   const onUpdateCheckbox = async (noteId: string, isChecked: boolean) => {
+    console.log('checkbox', noteId);
     const noteRef = doc(db, "English_words", noteId); // dbのデータで一致するデータを特定する
     await updateDoc(noteRef, {remember: isChecked}); // 更新処理
 
@@ -118,7 +123,7 @@ function App() {
 
   // findは一致したデータを取得する関数
   const getActiveNote = () => {
-    return notes.find((note) => note.id === activeNote);
+    return notes.find((note) => note.folderId === activeNote);
   }
 
   // 英単語・英文更新

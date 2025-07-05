@@ -1,11 +1,16 @@
 export interface Note {
-    id: string;
+    folderId: string;
     english: string;
     japanese: string;
     remember: boolean;
     createDate: number;
     modDate: number | null;
 }
+
+// Firestore から取得したときのデータ（doc.id を含む）
+export type NoteDoc = Note & {
+  id: string; // Firestore の doc.id をここで追加
+};
 
 export type NewNoteData = {
   english?: string;
@@ -35,7 +40,7 @@ declare global {
 // Wordlist　Props
 export interface WordlistProps {
     onAddNote: () => void;
-    notes: Note[];
+    notes: NoteDoc[];
     onDeleteNote: (id: string) => void;
     activeNote: string | null;
     setActiveNote: (note: string | null) => void;
@@ -65,7 +70,7 @@ export interface SidebarPropsType {
 
 // ListeningProps
 export interface ListeningPropsType {
-    notes: Note[], 
+    notes: NoteDoc[], 
     onUpdateCheckbox: (noteId: string, isChecked: boolean) => Promise<void>;
 }
 
