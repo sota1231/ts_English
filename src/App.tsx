@@ -123,7 +123,7 @@ function App() {
 
   // findは一致したデータを取得する関数
   const getActiveNote = () => {
-    return notes.find((note) => note.folderId === activeNote);
+    return notes.find((note) => note.id === activeNote);
   }
 
   // 英単語・英文更新
