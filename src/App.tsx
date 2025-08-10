@@ -7,7 +7,7 @@ import Wordlist from './components/Wordlist'
 import { useEffect, useState } from 'react'
 import { auth, db } from "./firebase";
 import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot, query, where, DocumentData } from "firebase/firestore";
-import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary'
 import { Listening } from './components/Listening'
 import { VoiceSettingsProvider } from './contexts/VoiceSettingsContext'

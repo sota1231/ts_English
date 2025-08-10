@@ -14,10 +14,6 @@ export const Listening: React.FC<ListeningPropsType> = ({ notes, onUpdateCheckbo
 const filteredNotes = selectedWordId !== "0"
   ? notes.filter(note => note.folderId == selectedWordId)
   : notes;
-    // console.log("filteredNotes: " +filteredNotes.length)
-  // console.log("Notes: " +notes)
-  // console.log("selectedWordId: " +selectedWordId)
-  // console.log("notes:", JSON.stringify(notes, null, 2));
 
   // notesが変わった時だけ中身（メモ）が変化・問題の選定
   const getRandomUnrememberedWord = useCallback(() => {
@@ -45,7 +41,6 @@ const filteredNotes = selectedWordId !== "0"
     if (window.responsiveVoice) {
       window.responsiveVoice.cancel();
     }
-    // console.log('読み上げ: ' + text);
     
     // ResponsiveVoiceを使用して音声読み上げ
     if (window.responsiveVoice) {
@@ -54,14 +49,14 @@ const filteredNotes = selectedWordId !== "0"
         pitch: voiceSettings.pitch,
         volume: voiceSettings.volume,
         onend: () => {
-          // console.log('読み上げ完了');
+          console.log('読み上げ完了');
         },
         onerror: (error) => {
-          // console.error('読み上げエラー:', error);
+          console.error('読み上げエラー:', error);
         }
       });
     } else {
-      // console.error('ResponsiveVoiceが利用できません');
+      console.error('ResponsiveVoiceが利用できません');
     }
   };
 

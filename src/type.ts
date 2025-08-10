@@ -1,10 +1,10 @@
 export interface Note {
-    folderId: string;
-    english: string;
-    japanese: string;
-    remember: boolean;
-    createDate: number;
-    modDate: number | null;
+  folderId: string;
+  english: string;
+  japanese: string;
+  remember: boolean;
+  createDate: number;
+  modDate: number | null;
 }
 
 // Firestore から取得したときのデータ（doc.id を含む）

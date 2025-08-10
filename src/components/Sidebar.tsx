@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import './Sidebar.css';
 import { Link, useLocation } from 'react-router-dom';
 import { SidebarPropsType } from '../type';
@@ -103,24 +103,6 @@ const Sidebar: React.FC<SidebarPropsType> = ({
           </svg>
           音声設定
         </Link>
-        {/* <div className='advice'>
-          <span>聞き取れない原因は２つ</span><br></br>
-          ①知らない単語・短文　→　短文を覚える<br></br>
-          ②正しい発音を知らない　→　リンキング、シャドーイング<br></br>
-          <br></br>
-          またリスニングには<br></br>
-          音声知覚（聴こえた音）<br></br>
-          意味理解（文を塊で理解,声色,話の流れ）<br></br>
-          がある。<br></br>
-        </div>
-
-        <div className='advice english_brain'>
-          <span>スムーズな会話には英語脳が必須</span><br></br>
-          ①日本語から英語を作るステップをする<br></br>
-          ②ある程度できるようになったら①の日本語と英語で紐づけず<br></br>
-          イメージと英語で紐づけをする<br></br>
-          
-        </div> */}
       </div>
     </div>
   )
